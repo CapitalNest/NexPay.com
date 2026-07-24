@@ -3,44 +3,53 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NexPay — Login</title>
-<meta name="theme-color" content="#0b0f1a" />
+<title>NexPay — Secure Login</title>
+<meta name="theme-color" content="#ffffff" />
 <style>
   :root{
-    --bg:#0b0f1a; --card:#0f1424; --muted:#9aa3b2; --pri:#6ee7ff; --pri2:#7c3aed;
+    --bg:#f8fafc; --card:#ffffff; --muted:#64748b; --pri:#0284c7; --pri2:#4f46e5;
+    --br:20px; --text:#0f172a; --border:#e2e8f0;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0; background: radial-gradient(1200px 600px at 80% -10%, rgba(124,58,237,.25), transparent 60%),
-              radial-gradient(900px 500px at -10% 100%, rgba(110,231,255,.18), transparent 60%), var(--bg);
-    color:#e7ecf5; font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    margin:0; background: radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.05), transparent 60%),
+              radial-gradient(900px 500px at -10% 100%, rgba(2,132,199,.05), transparent 60%), var(--bg);
+    color:var(--text); font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   }
   .center{min-height:100%; display:grid; place-items:center; padding:20px}
   .panel{
-    width:min(500px,94vw); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)), var(--card);
-    border:1px solid rgba(255,255,255,.06); border-radius: clamp(16px,3vw,28px); padding: clamp(20px,5vw,40px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    width:min(500px,94vw); background: var(--card);
+    border:1px solid var(--border); border-radius: clamp(16px,3vw,28px); padding: clamp(24px,5vw,44px);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,.05), 0 8px 10px -6px rgba(0,0,0,.05);
   }
   .title{
-    font-size: clamp(22px,3.2vw,32px); font-weight:800;
-    background: linear-gradient(90deg,#fff,#cfeaff); -webkit-background-clip:text; color:transparent;
-    margin-bottom:20px; text-align:center;
+    font-size: clamp(22px,3.2vw,28px); font-weight:700; color:var(--text);
+    margin-bottom:20px; text-align:center; letter-spacing:-0.5px;
   }
   textarea{
-    width:100%; min-height:100px; border-radius:12px; padding:12px; resize:none;
-    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); color:#fff; font-size:14px;
+    width:100%; min-height:120px; border-radius:14px; padding:16px; resize:none;
+    background:#f8fafc; border:1px solid var(--border); color:var(--text); font-size:14px;
+    outline:none; transition:all 0.2s ease;
   }
+  textarea:focus{
+    border-color:var(--pri);
+    box-shadow: 0 0 0 3px rgba(2,132,199,.1);
+    background:#ffffff;
+  }
+  textarea::placeholder{color:var(--muted); opacity:0.8;}
   .btn{
-    margin-top:16px; cursor:pointer; border:none; padding:14px 18px; border-radius:12px; font-weight:700;
-    background: linear-gradient(90deg,#7c3aed,#6ee7ff); color:#0b0f1a; width:100%; font-size:15px;
+    margin-top:20px; cursor:pointer; border:none; padding:14px 18px; border-radius:14px; font-weight:700;
+    background: linear-gradient(90deg,#4f46e5,#0284c7); color:#fff; width:100%; font-size:15px;
+    box-shadow: 0 4px 12px rgba(79,70,229,.25); transition:all 0.2s ease;
   }
+  .btn:hover{opacity:.95; transform:translateY(-1px);}
   .alert{
-    margin-top:14px; padding:12px; border-radius:10px; font-size:14px; font-weight:600; text-align:center;
+    margin-top:16px; padding:14px; border-radius:12px; font-size:14px; font-weight:600; text-align:center;
     display:none;
   }
-  .alert.success{background:rgba(110,231,183,.15); color:#6ee7ff; border:1px solid rgba(110,231,255,.3)}
-  .alert.error{background:rgba(237,58,58,.15); color:#ff7c7c; border:1px solid rgba(237,58,58,.3)}
+  .alert.success{background:rgba(16,185,129,.08); color:#10b981; border:1px solid rgba(16,185,129,.2)}
+  .alert.error{background:rgba(239,68,68,.08); color:#ef4444; border:1px solid rgba(239,68,68,.2)}
 </style>
 </head>
 <body>
