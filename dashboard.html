@@ -449,7 +449,7 @@
               <div class="asset-name">Bitcoin</div>
             </div>
           </div>
-          <div class="asset-balance-val" id="btc-balance">0.0096</div>
+          <div class="asset-balance-val" id="btc-balance">0.0000</div>
         </div>
         <!-- ETH -->
         <div class="asset-row">
@@ -575,7 +575,7 @@
       const lastActive = localStorage.getItem('lastActiveTime');
       if (lastActive && (Date.now() - parseInt(lastActive) >= TIMEOUT_DURATION)) {
           localStorage.removeItem('lastActiveTime');
-          window.location.href = 'acc.html';
+          window.location.href = 'pin.html';
       }
   }
   function resetTimer() { localStorage.setItem('lastActiveTime', Date.now().toString()); }
