@@ -8,13 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #060910;
-            --card: #0f172a;
-            --border: rgba(255, 255, 255, 0.06);
-            --success: #10b981;
-            --text: #ffffff;
-            --text-dim: #94a3b8;
-            --pri: #6ee7ff;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --success: #059669;
+            --text: #0f172a;
+            --text-dim: #64748b;
+            --pri: #0052ff;
         }
 
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
@@ -25,12 +25,9 @@
             overflow: hidden; /* Prevents bounce scrolling on mobile */
         }
 
-        /* INVISIBLE INPUT */
-        #uid-trigger { position: absolute; opacity: 0; pointer-events: none; }
-
         .app-shell {
             height: 100%; display: flex; flex-direction: column;
-            background-image: radial-gradient(circle at 50% -10%, #1e1b4b 0%, var(--bg) 70%);
+            background-color: var(--bg);
             padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
         }
 
@@ -41,9 +38,10 @@
 
         /* SUCCESS ANIMATION */
         .success-anim {
-            width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1);
+            width: 80px; height: 80px; background: #ecfdf5;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             color: var(--success); font-size: 32px; position: relative; margin-bottom: 15px;
+            border: 1px solid #a7f3d0;
         }
         .success-anim::after {
             content: ''; position: absolute; inset: -5px; border: 2px solid var(--success);
@@ -52,46 +50,53 @@
 
         @keyframes pulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.4); opacity: 0; } }
 
-        .status-text { font-size: 22px; font-weight: 800; margin-bottom: 5px; letter-spacing: -0.5px; }
+        .status-text { font-size: 22px; font-weight: 800; margin-bottom: 5px; letter-spacing: -0.5px; color: var(--text); }
         .confirmed-pill {
-            background: rgba(16, 185, 129, 0.15); color: var(--success);
+            background: #ecfdf5; color: var(--success);
             font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 100px;
             text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 30px;
+            border: 1px solid #a7f3d0;
         }
 
         /* MAIN AMOUNT */
         .amount-display { text-align: center; margin-bottom: 40px; }
-        .btc-val { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
+        .btc-val { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; color: var(--text); }
         .eur-val { font-size: 16px; color: var(--text-dim); font-weight: 500; }
 
         /* DATA TABLE */
         .receipt-card {
             width: 100%; background: var(--card); border: 1px solid var(--border);
-            border-radius: 28px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-radius: 20px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
-        .row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .row:not(:last-child) { border-bottom: 1px solid var(--border); }
 
         .label { color: var(--text-dim); font-size: 13px; font-weight: 500; }
         .value { color: var(--text); font-size: 14px; font-weight: 600; text-align: right; }
         .mono { font-family: monospace; color: var(--pri); font-size: 12px; }
 
+        /* INVISIBLE INPUT */
+        .uid-input {
+            background: transparent; border: none; outline: none;
+            color: var(--text); font-size: 14px; font-weight: 600;
+            text-align: right; font-family: 'Inter', sans-serif;
+            width: 160px; cursor: default;
+        }
+
         /* ACTIONS */
         .footer { padding: 20px 0 30px; display: grid; gap: 12px; }
         .btn {
-            width: 100%; padding: 18px; border-radius: 18px; font-size: 16px;
+            width: 100%; padding: 18px; border-radius: 12px; font-size: 16px;
             font-weight: 700; border: none; cursor: pointer; transition: 0.2s;
         }
-        .btn-primary { background: #ffffff; color: #000000; }
-        .btn-secondary { background: rgba(255,255,255,0.06); color: #ffffff; border: 1px solid var(--border); }
+        .btn-primary { background: var(--pri); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 82, 255, 0.2); }
+        .btn-secondary { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
         .btn:active { transform: scale(0.97); }
 
     </style>
 </head>
 <body>
-
-    <input type="text" id="uid-trigger" autofocus>
 
     <div class="app-shell">
         <div class="header">
@@ -112,7 +117,7 @@
             <div class="receipt-card">
                 <div class="row">
                     <span class="label">To (UID)</span>
-                    <span class="value" id="res-uid">---</span>
+                    <span class="value"><input type="text" id="res-uid" class="uid-input" placeholder="---"></span>
                 </div>
                 <div class="row">
                     <span class="label">Network</span>
@@ -140,12 +145,14 @@
     </div>
 
     <script>
-        const input = document.getElementById('uid-trigger');
-        const display = document.getElementById('res-uid');
+        const input = document.getElementById('res-uid');
 
-        // Automatically update the UID when you paste or type
+        // Load previously entered UID if available
+        input.value = localStorage.getItem('saved_uid') || '';
+
+        // Save UID as user types or pastes
         input.addEventListener('input', () => {
-            display.textContent = input.value || "---";
+            localStorage.setItem('saved_uid', input.value);
         });
 
         // Set the current date in a professional format
@@ -156,7 +163,7 @@
         }).replace(',', '');
         document.getElementById('date-now').textContent = dateString;
 
-        // Keep input focused so you can just "Paste" anywhere
+        // Keep input ready for instant paste anywhere on the page
         document.addEventListener('click', () => input.focus());
         window.onload = () => input.focus();
     </script>
