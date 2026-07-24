@@ -131,7 +131,7 @@ function calcUSDT(){
   const amt = parseInt(document.getElementById('amount').value, 10);
   const info = document.getElementById('usdtInfo');
   if(!isNaN(amt) && amt >= 8764 && amt <= 300000){
-    const usdt = (amt / 1539).toFixed(2);
+    const usdt = (amt / 1380).toFixed(2);
     info.style.display = "block";
     info.textContent = `You receive ≈ ${usdt} USDT`;
   } else {
