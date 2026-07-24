@@ -100,7 +100,7 @@
 </div>
 
 <div class="input-group">
-  <label for="amount">BTC Amount (Min. 0.0050)</label>
+  <label for="amount">BTC Amount (Min. 0.0056)</label>
   <div class="field-wrap">
     <input type="number" id="amount" step="0.0001" placeholder="0.0050" inputmode="decimal">
     <button class="all-btn" onclick="setAll()">MAX</button>
@@ -159,7 +159,7 @@
 </div>
 
 <script>
-  const rate = 475987;
+  const rate = 463264;
   const amountInput = document.getElementById('amount');
   const nairaValue = document.getElementById('nairaValue');
   const balanceText = document.getElementById('balanceText');
@@ -173,13 +173,13 @@
         nairaValue.value = "₦0";
         return;
     }
-    amountInput.value = 0.0050;
+    amountInput.value = 0.0056;
     calculate();
   }
 
   function calculate() {
     const val = parseFloat(amountInput.value);
-    if(hasBalance && val >= 0.0050) {
+    if(hasBalance && val >= 0.0056) {
         nairaValue.value = "Fetching Rate...";
         nairaValue.classList.add('loader-dots');
         setTimeout(() => {
@@ -198,8 +198,8 @@
       triggerAlert("Empty Wallet", "You do not have any BTC available to sell.", "📁");
       return;
     }
-    if(parseFloat(amountInput.value) < 0.0050 || !amountInput.value) {
-      alert("Minimum amount is 0.0050 BTC");
+    if(parseFloat(amountInput.value) < 0.0056 || !amountInput.value) {
+      alert("Minimum amount is 0.0056 BTC");
       return;
     }
     if(document.getElementById('account').value.length < 10) {
