@@ -4,97 +4,98 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 <title>NexPay — P2P Market</title>
-<meta name="theme-color" content="#060910"/>
+<meta name="theme-color" content="#ffffff"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #060910;
-    --card: rgba(17, 25, 40, 0.85);
-    --border: rgba(255, 255, 255, 0.08);
-    --pri: #6ee7ff;
-    --pri2: #7c3aed;
-    --text: #f8fafc;
-    --text-dim: #94a3b8;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --pri: #0052ff;
+    --pri2: #10b981;
+    --text: #0f172a;
+    --text-dim: #64748b;
   }
 
   * { box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; margin: 0; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
-  body {
-    background-image:
-      radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.08) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(110, 231, 255, 0.05) 0px, transparent 50%);
-    background-attachment: fixed;
-  }
-
   /* MODERN HEADER */
   header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 20px;
-    background: rgba(6, 9, 16, 0.8);
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     position: sticky; top: 0; z-index: 1000;
   }
 
   .brand { display: flex; align-items: center; gap: 8px; }
-  .flag { width: 22px; height: 15px; border-radius: 3px; background: linear-gradient(#008751 33%, #fff 33% 66%, #008751 66%); }
-  .brand strong { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; }
+  .flag { width: 22px; height: 15px; border-radius: 3px; background: linear-gradient(#008751 33%, #fff 33% 66%, #008751 66%); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+  .brand strong { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; color: var(--text); }
 
   .select {
-    background: rgba(255, 255, 255, 0.05);
+    background: #f1f5f9;
     border: 1px solid var(--border);
-    color: #fff; border-radius: 10px;
+    color: var(--text); border-radius: 8px;
     padding: 6px 12px; font-size: 13px; font-weight: 600; outline: none;
   }
 
   /* TABS */
-  .tabs { display: flex; background: rgba(255, 255, 255, 0.02); margin: 15px 20px; border-radius: 12px; padding: 4px; border: 1px solid var(--border); }
+  .tabs { display: flex; background: #e2e8f0; margin: 15px 20px; border-radius: 10px; padding: 3px; border: 1px solid var(--border); }
   .tab {
     flex: 1; text-align: center; padding: 10px; font-size: 14px;
     font-weight: 700; cursor: pointer; color: var(--text-dim);
-    transition: all 0.2s ease; border-radius: 10px;
+    transition: all 0.2s ease; border-radius: 8px;
   }
-  .tab.active { background: var(--pri); color: #060910; box-shadow: 0 4px 12px rgba(110, 231, 255, 0.2); }
+  .tab.active { background: #ffffff; color: var(--pri); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); }
 
   /* AD LIST */
-  .ads { padding: 0 20px 100px; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+  .ads { padding: 0 20px 100px; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
   .ad {
     display: flex; flex-direction: column; gap: 12px;
-    padding: 20px; border-radius: 20px;
+    padding: 18px; border-radius: 16px;
     background: var(--card);
     border: 1px solid var(--border);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     animation: fadeIn 0.4s ease;
   }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
   .ad-top { display: flex; justify-content: space-between; align-items: flex-start; }
-  .name { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 5px; }
-  .name::after { content: "✓"; background: #10b981; color: #fff; font-size: 9px; padding: 2px 4px; border-radius: 4px; }
+  .name { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 6px; color: var(--text); }
+  .name::after { content: "✓"; background: #10b981; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: 800; }
 
-  .stats { font-size: 11px; color: var(--text-dim); font-weight: 500; margin-top: 2px; }
+  .stats { font-size: 12px; color: var(--text-dim); font-weight: 500; margin-top: 2px; }
 
-  .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
-  .price { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+  .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 2px; }
+  .price { font-size: 22px; font-weight: 900; color: var(--text); letter-spacing: -0.5px; }
 
   .meta { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
   .meta strong { color: var(--text); }
 
+  /* PAYMENT TAGS */
+  .pay-tags { display: flex; gap: 6px; margin-top: 2px; }
+  .pay-tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: #f1f5f9; color: var(--text-dim); border: 1px solid var(--border); }
+  .pay-tag.airtime { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+  .pay-tag.bank { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+
   .btn {
-    cursor: pointer; border: none; padding: 10px 24px; border-radius: 12px;
-    font-weight: 800; font-size: 14px;
-    background: linear-gradient(135deg, var(--pri), var(--pri2));
-    color: #060910; transition: transform 0.1s;
+    cursor: pointer; border: none; padding: 10px 22px; border-radius: 10px;
+    font-weight: 700; font-size: 14px;
+    background: var(--pri);
+    color: #fff; transition: transform 0.1s, background 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 82, 255, 0.2);
   }
   .btn:active { transform: scale(0.96); }
+  .btn-sell { background: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
 
   /* FOOTER NAV */
   footer {
     position: fixed; left: 0; right: 0; bottom: 0;
-    background: rgba(6, 9, 16, 0.95);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     display: flex; justify-content: space-around;
     padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
@@ -111,13 +112,14 @@
   /* ALERT */
   .alert {
     position: fixed; left: 20px; right: 20px; bottom: 90px;
-    padding: 16px; border-radius: 16px;
-    background: rgba(239, 68, 68, 0.95);
-    color: #fff; font-weight: 700; text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 14px 20px; border-radius: 12px;
+    background: rgba(15, 23, 42, 0.95);
+    color: #fff; font-weight: 600; text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     opacity: 0; pointer-events: none; transform: translateY(10px);
     transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 9999; font-size: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
   }
   .alert.show { opacity: 1; transform: translateY(0); }
 </style>
@@ -224,8 +226,8 @@ let currentTab='buy';
 function toast(msg, good=false){
   const t=document.getElementById('toast');
   t.textContent=msg;
-  t.style.background = good ? "rgba(110, 231, 255, 0.95)" : "rgba(239, 68, 68, 0.95)";
-  t.style.color = good ? "#060910" : "#fff";
+  t.style.background = good ? "#0f172a" : "#ef4444";
+  t.style.color = "#fff";
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500);
 }
 
@@ -262,10 +264,25 @@ function renderAds(){
     const trades = (1200 + (i * 45));
 
     if(currentTab==='buy'){
+      // Specific assignments based on index (0-indexed: i=0 is 1st, i=1 is 2nd, etc.)
+      // 0: airtime payment
+      // 1: bank transfer
+      // 2: bank transfer
+      // 3: airtime payment
+      // 4: bank transfer
+      // 5: bank transfer (rest are bank transfers)
+      // 6: airtime payment (7th one, i=6)
+      // 7, 8, 9: bank transfer
+      let paymentTagHtml = `<div class="pay-tags"><span class="pay-tag bank">🏦 Bank Transfer</span></div>`;
+      if (i === 0 || i === 3 || i === 6) {
+        paymentTagHtml = `<div class="pay-tags"><span class="pay-tag airtime">📱 Airtime Payment</span></div>`;
+      }
+
       ad.innerHTML=`
         <div class="ad-top">
           <div>
             <div class="name">${n}</div>
+            <div class="stats">${trades} orders · ${rate}% completion</div>
           </div>
         </div>
         <div class="price-row">
@@ -275,8 +292,9 @@ function renderAds(){
           </div>
           <button class="btn">Buy USDT</button>
         </div>
-        <div class="meta">
-          Limit <strong>₦16,437 – ₦300,000</strong><br>
+        ${paymentTagHtml}
+        <div class="meta" style="margin-top: 4px;">
+          Limit <strong>₦8,764 – ₦300,000</strong><br>
           Available <strong>${(120+ i*20).toFixed(2)} USDT</strong>
         </div>
       `;
@@ -289,6 +307,7 @@ function renderAds(){
         <div class="ad-top">
           <div>
             <div class="name">${n}</div>
+            <div class="stats">${trades} orders · ${rate}% completion</div>
           </div>
         </div>
         <div class="price-row">
@@ -296,9 +315,10 @@ function renderAds(){
             <div class="meta">Price</div>
             <div class="price">₦ ${(1539.5 + i*50).toFixed(2)}</div>
           </div>
-          <button class="btn" style="background: #fff; color: #000;">Sell BTC</button>
+          <button class="btn btn-sell">Sell BTC</button>
         </div>
-        <div class="meta">
+        <div class="pay-tags"><span class="pay-tag bank">🏦 Bank Transfer</span></div>
+        <div class="meta" style="margin-top: 4px;">
           Limit <strong>₦300,000 – ₦${maxLimit.toLocaleString()}</strong><br>
           Available <strong>${qty} BTC</strong>
         </div>
