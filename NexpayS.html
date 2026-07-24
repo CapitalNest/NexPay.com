@@ -4,68 +4,235 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>NexPay — Sign Up</title>
-<meta name="theme-color" content="#0b0f1a" />
+<meta name="theme-color" content="#ffffff" />
 <style>
-  :root{
-    --bg:#0b0f1a; --card:#0f1424; --muted:#9aa3b2; --pri:#6ee7ff; --pri2:#7c3aed;
-    --br:20px;
+  :root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --muted: #64748b;
+    --text-main: #0f172a;
+    --pri: #0560fa;
+    --pri-hover: #024ebd;
+    --pri-light: #eff6ff;
+    --ok: #10b981;
+    --danger: #ef4444;
+    --border: #e2e8f0;
+    --shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+    --br: 24px;
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; background: radial-gradient(1200px 600px at 80% -10%, rgba(124,58,237,.25), transparent 60%),
-              radial-gradient(900px 500px at -10% 100%, rgba(110,231,255,.18), transparent 60%), var(--bg);
-    color:#e7ecf5; font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  
+  * { box-sizing: border-box; }
+  
+  html, body {
+    height: 100%;
+    margin: 0;
   }
-  .center{min-height:100%; display:grid; place-items:center; padding:20px}
-  .panel{
-    width:min(900px,94vw); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)), var(--card);
-    border:1px solid rgba(255,255,255,.06); border-radius: clamp(16px,3vw,28px); padding: clamp(20px,5vw,40px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  
+  body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-  .loader, .phrase{transition:opacity .35s ease}
-  .nx{
-    display:flex; align-items:center; justify-content:center; font-weight:900;
-    font-size: clamp(30px,6vw,60px); letter-spacing:.5px;
-    background: linear-gradient(92deg, #6ee7ff, #7c3aed); -webkit-background-clip:text; color:transparent;
-    text-shadow:0 12px 50px rgba(124,58,237,.35)
+  
+  .center {
+    min-height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 24px 20px;
   }
-  .orbit{
-    width:110px; height:110px; border-radius:50%; margin:20px auto 0;
-    position:relative; border:1px dashed rgba(255,255,255,.15);
-    animation: spin 6s linear infinite;
+  
+  .panel {
+    width: min(720px, 94vw);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--br);
+    padding: clamp(24px, 5vw, 44px);
+    box-shadow: var(--shadow);
   }
-  .orb{position:absolute; inset:-8px; width:18px; height:18px; border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, #fff, #7c3aed);
-    box-shadow: 0 0 24px rgba(124,58,237,.8); animation: bob 1.8s ease-in-out infinite;
+  
+  .loader, .phrase {
+    transition: opacity .35s ease;
   }
-  .bar{height:8px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; margin:16px auto; width:70%}
-  .bar>span{display:block; height:100%; background: linear-gradient(90deg,#7c3aed,#6ee7ff); width:0%; animation: fill 7s ease forwards}
-  @keyframes bob{50%{transform:translateY(6px)}}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @keyframes fill{to{width:100%}}
+  
+  /* Brand Logo & Text */
+  .nx {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 42px);
+    letter-spacing: -0.5px;
+    color: var(--text-main);
+  }
 
-  .title{
-    font-size: clamp(22px,3.2vw,32px); font-weight:800;
-    background: linear-gradient(90deg,#fff,#cfeaff); -webkit-background-clip:text; color:transparent;
-    margin: 6px 0 12px;
+  .nx::before {
+    content: "N";
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0560fa, #00d2ff);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 900;
+    box-shadow: 0 4px 12px rgba(5, 96, 250, 0.25);
   }
-  .warning{margin: 6px 0 16px; color:#e2e8f0; opacity:.9}
-  .grid{display:grid; grid-template-columns: repeat(2,1fr); gap:12px; margin:16px 0 10px}
-  @media (max-width:680px){ .grid{grid-template-columns:1fr} }
-  .word{
-    background: rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08);
-    border-radius:12px; padding:10px 12px; display:flex; gap:10px; align-items:center; font-weight:600;
+  
+  /* Modern Spinner */
+  .orbit {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 32px auto 0;
+    position: relative;
+    border: 3px solid #f1f5f9;
+    border-top-color: var(--pri);
+    animation: spin 1s linear infinite;
   }
-  .idx{color:#9aa3b2; font-size:12px; width:18px; text-align:right}
-  .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
-  .btn{cursor:pointer; border:none; padding:13px 16px; border-radius:12px; font-weight:800; letter-spacing:.2px}
-  .btn-pri{background: linear-gradient(90deg,#7c3aed,#6ee7ff); color:#0b0f1a}
-  .btn-sec{background: transparent; border:1px solid rgba(255,255,255,.15); color:#e7ecf5}
-  .helper{font-size:13px; color:#9aa3b2}
-  .small{font-size:12px; opacity:.85}
-  .topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; color:#9aa3b2}
-  .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-weight:700}
+  
+  .orb { display: none; } /* Replaced with clean border spinner */
+  
+  .bar {
+    height: 6px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    overflow: hidden;
+    margin: 28px auto 16px;
+    width: 60%;
+  }
+  
+  .bar > span {
+    display: block;
+    height: 100%;
+    background: var(--pri);
+    width: 0%;
+    animation: fill 7s ease forwards;
+  }
+  
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fill { to { width: 100%; } }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .title {
+    font-size: clamp(22px, 3.2vw, 28px);
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+    margin: 0 0 8px;
+  }
+  
+  .warning {
+    margin: 0 0 24px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .warning strong {
+    color: var(--text-main);
+  }
+  
+  /* Seed Phrase Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+  }
+  
+  @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } }
+  
+  .word {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-weight: 600;
+  }
+  
+  .idx {
+    color: var(--muted);
+    font-size: 12px;
+    width: 20px;
+    text-align: right;
+  }
+
+  .kbd {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 15px;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  
+  .btn {
+    cursor: pointer;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn:active { transform: scale(0.98); }
+  
+  .btn-pri {
+    background: var(--pri);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(5, 96, 250, 0.25);
+    flex: 1;
+  }
+
+  .btn-pri:hover {
+    background: var(--pri-hover);
+  }
+  
+  .btn-sec {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+  }
+
+  .btn-sec:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+  }
+  
+  .helper {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 14px;
+  }
+
+  .small { font-size: 13px; }
 </style>
 </head>
 <body>
@@ -76,14 +243,14 @@
       <div class="nx">NexPay</div>
       <div class="orbit"><div class="orb" style="top:50%; left:-8px; transform:translateY(-50%)"></div></div>
       <div class="bar"><span></span></div>
-      <div style="text-align:center; color:#9aa3b2;">Setting up secure environment…</div>
+      <div style="text-align:center; color: var(--muted); font-size: 14px; font-weight: 500;">Setting up secure environment…</div>
     </div>
 
     <!-- PHRASE -->
     <div id="phrase" class="phrase" style="display:none; opacity:0;">
       <div class="topbar">
         <div>Step 2 of 2</div>
-        <a class="btn btn-sec" href="index.html" style="padding:8px 12px; border-radius:10px">Back</a>
+        <a class="btn btn-sec" href="index.html" style="padding:8px 14px; border-radius:10px; font-size:13px;">Back</a>
       </div>
       <div class="title">Your 17-word Recovery Phrase</div>
       <div class="warning">
@@ -159,30 +326,27 @@
   });
 </script>
 
-
-  
-    <div id="security-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(4, 6, 11, 0.95); backdrop-filter:blur(12px); display:flex; align-items:center; justify-content:center; padding:20px;">
-    <div style="background:#0f172a; border:1px solid rgba(255,255,255,0.1); border-radius:32px; width:100%; max-width:400px; padding:32px; text-align:center; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+<div id="security-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(15, 23, 42, 0.6); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:24px; width:100%; max-width:420px; padding:32px; text-align:center; box-shadow:0 25px 50px -12px rgba(15, 23, 42, 0.15); animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
         
-        <div style="width:64px; height:64px; background:rgba(239, 68, 68, 0.1); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div style="width:56px; height:56px; background:#fef2f2; border-radius:16px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
 
-        <h2 style="color:#fff; font-family:'Inter',sans-serif; font-size:22px; font-weight:800; margin-bottom:16px; letter-spacing:-0.5px;">Security Advisory</h2>
+        <h2 style="color:#0f172a; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size:20px; font-weight:800; margin-bottom:12px; letter-spacing:-0.5px;">Security Advisory</h2>
         
-        <p style="color:#94a3b8; font-family:'Inter',sans-serif; font-size:14px; line-height:1.6; margin-bottom:24px;">
-            <strong style="color:#fff;">Do not create a wallet in Incognito/Private mode.</strong> 
+        <p style="color:#64748b; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size:14px; line-height:1.6; margin-bottom:20px;">
+            <strong style="color:#0f172a;">Do not create a wallet in Incognito/Private mode.</strong> 
             Your access keys are stored locally on this device. Private browsing sessions delete local data upon closing, which will result in the <span style="color:#ef4444; font-weight:700;">permanent loss of your assets</span>.
         </p>
 
-        <div style="background:rgba(255,255,255,0.03); border-radius:16px; padding:16px; margin-bottom:30px; border:1px solid rgba(255,255,255,0.05);">
-            <div style="display:flex; align-items:center; gap:10px; color:#fff; font-size:13px; font-weight:600; text-align:left;">
-                <span style="color:#10b981;">✓</span> Use a standard browser tab
+        <div style="background:#f8fafc; border-radius:12px; padding:14px; margin-bottom:24px; border:1px solid #e2e8f0;">
+            <div style="display:flex; align-items:center; gap:10px; color:#334155; font-size:13px; font-weight:600; text-align:left;">
+                <span style="color:#10b981; font-size:16px;">✓</span> Use a standard browser tab
             </div>
-           
         </div>
 
-        <button id="close-modal-btn" disabled style="width:100%; height:56px; border-radius:16px; border:none; background:#fff; color:#000; font-weight:700; font-size:15px; cursor:pointer; opacity:0.5; transition:0.3s;">
+        <button id="close-modal-btn" disabled style="width:100%; height:50px; border-radius:12px; border:none; background:#0560fa; color:#ffffff; font-weight:700; font-size:15px; cursor:pointer; opacity:0.5; transition:0.3s;">
             I Understand (10s)
         </button>
     </div>
