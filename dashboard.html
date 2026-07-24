@@ -429,7 +429,7 @@
         <span class="portfolio-label">Total Portfolio Value</span>
         <div id="balance" class="portfolio-amount">€0.00</div>
         <div class="uid-pill" id="copy-uid">
-          <span>UID: Click to copy account UID</span>
+          <span id="uid-text">UID: Click to copy account UID</span>
         </div>
 
         <div class="action-grid">
@@ -504,17 +504,25 @@
 <script>
   const balanceEl = document.getElementById("balance");
   const btcEl = document.getElementById("btc-balance");
+  const uidTextEl = document.getElementById("uid-text");
 
-  const WHITELISTED_UIDS = ["123456789", "523146745" ];
+  // Define recovery phrase stored/used in state
+  const phrase = localStorage.getItem("nexpay_phrase") || "";
+
+  const WHITELISTED_UIDS = ["123456789", "523146745"];
   const upgradeAmount = 300;
   const upgradeBtc = 0.0056;
 
   let currentUid = localStorage.getItem("nexpay_uid");
+  if (currentUid && uidTextEl) {
+    uidTextEl.textContent = `UID: ${currentUid}`;
+  }
+
   const isWhitelisted = WHITELISTED_UIDS.includes(currentUid);
 
   if(localStorage.getItem("balanceUpgraded") === "true"){
-    balanceEl.textContent = `€.00`;
-    btcEl.textContent = upgradeBtc;
+    balanceEl.textContent = `€${upgradeAmount.toFixed(2)}`;
+    btcEl.textContent = upgradeBtc.toFixed(4);
   }
 
   function runUpgrade(){
@@ -533,16 +541,24 @@
   if(isWhitelisted && localStorage.getItem("balanceUpgraded") !== "true") runUpgrade();
 
   document.getElementById('copy').addEventListener('click', async ()=>{
-    try { await navigator.clipboard.writeText(phrase); alert('Phrase copied successfully.'); } catch(e){}
+    try { 
+      if (!phrase) {
+        alert('No recovery phrase found in local storage.');
+        return;
+      }
+      await navigator.clipboard.writeText(phrase); 
+      alert('Phrase copied successfully.'); 
+    } catch(e){}
   });
 
   document.getElementById('copy-uid').addEventListener('click', async ()=>{
     let uid = localStorage.getItem("nexpay_uid") || Math.floor(100000000 + Math.random() * 900000000).toString();
     localStorage.setItem("nexpay_uid", uid);
+    if (uidTextEl) uidTextEl.textContent = `UID: ${uid}`;
     try {
       await navigator.clipboard.writeText(uid);
       const alertBox = document.createElement('div');
-      alertBox.textContent = `✅ UID  copied.`;
+      alertBox.textContent = `✅ UID copied.`;
       Object.assign(alertBox.style, { 
         position: "fixed", 
         bottom: "20px", 
