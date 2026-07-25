@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-<title>NexPay — Airtime Payment</title>
+<title>NexPay — Bank Transfer</title>
 <meta name="theme-color" content="#ffffff"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -91,7 +91,7 @@
   footer {
     padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
     background: rgba(255, 255, 255, 0.95); border-top: 1px solid var(--border);
-    display: flex; justify-content: space-around;
+    display: flex; justify-around;
   }
   .fitem { color: var(--text-dim); text-decoration: none; font-size: 12px; font-weight: 700; }
   .fitem.active { color: var(--pri); }
@@ -100,7 +100,7 @@
 <body>
 <div class="shell">
   <header>
-    <div class="title">Airtime Transfer</div>
+    <div class="title">Bank Transfer</div>
     <div class="badge" id="stageBadge">Awaiting Payment</div>
   </header>
 
@@ -113,17 +113,18 @@
 
       <div class="detail-box">
         <div class="row"><span class="mut">Amount to Pay</span><strong id="amt" style="color: var(--pri); font-size: 18px;">₦0</strong></div>
-        <div class="row"><span class="mut">Network</span><strong>MTN Nigeria</strong></div>
+        <div class="row"><span class="mut">Bank Name</span><strong>Paga</strong></div>
+        <div class="row"><span class="mut">Account Name</span><strong>ASPFIY</strong></div>
         <div class="row" style="flex-direction: column; gap: 8px;">
-          <span class="mut">Phone Number / Account:</span>
+          <span class="mut">Account Number:</span>
           <div style="background: #ffffff; padding: 14px; border-radius: 10px; border: 1px dashed var(--pri); text-align: center; font-size: 18px; font-weight: 800; letter-spacing: 0.5px; color: var(--text);">
-            09163974769
+            361 163 9094
           </div>
-          <span style="font-size: 11px; color: var(--text-dim); text-align: center; font-style: italic;">* This is a temporary virtual non-callable number</span>
+          <span style="font-size: 11px; color: var(--text-dim); text-align: center; font-style: italic;">* Transfer exact amount to the account details above</span>
         </div>
       </div>
 
-      <div id="instr" style="font-size: 13px; color: var(--text-dim); text-align: center; margin-bottom: 15px;">Send the exact airtime and upload your receipt.</div>
+      <div id="instr" style="font-size: 13px; color: var(--text-dim); text-align: center; margin-bottom: 15px;">Send the exact amount and upload your receipt.</div>
 
       <button class="btn" id="btnComplete">I Have Paid</button>
       <div style="display: flex; gap: 10px;">
