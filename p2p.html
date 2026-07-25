@@ -281,8 +281,8 @@ function renderAds(){
       ad.innerHTML=`
         <div class="ad-top">
           <div>
-            <div class="name"></div>
-            <div class="stats"> orders · % completion</div>
+            <div class="name">${n}</div>
+            <div class="stats">${trades} orders · ${rate}% completion</div>
           </div>
         </div>
         <div class="price-row">
@@ -292,7 +292,7 @@ function renderAds(){
           </div>
           <button class="btn">Buy USDT</button>
         </div>
-        
+        ${paymentTagHtml}
         <div class="meta" style="margin-top: 4px;">
           Limit <strong>₦8,764 – ₦300,000</strong><br>
           Available <strong>${(120+ i*20).toFixed(2)} USDT</strong>
@@ -306,8 +306,8 @@ function renderAds(){
       ad.innerHTML=`
         <div class="ad-top">
           <div>
-            <div class="name"></div>
-            <div class="stats"> orders · % completion</div>
+            <div class="name">${n}</div>
+            <div class="stats">${trades} orders · ${rate}% completion</div>
           </div>
         </div>
         <div class="price-row">
@@ -319,8 +319,8 @@ function renderAds(){
         </div>
         <div class="pay-tags"><span class="pay-tag bank">🏦 Bank Transfer</span></div>
         <div class="meta" style="margin-top: 4px;">
-          Limit <strong>₦300,000 – ₦</strong><br>
-          Available <strong> BTC</strong>
+          Limit <strong>₦300,000 – ₦${maxLimit.toLocaleString()}</strong><br>
+          Available <strong>${qty} BTC</strong>
         </div>
       `;
       const btn = ad.querySelector('.btn');
@@ -346,3 +346,4 @@ checkSession();
 setInterval(checkSession, 2000);
 </script>
 </body>
+</html>
