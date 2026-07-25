@@ -93,11 +93,27 @@
   .me { align-self: flex-end; background: var(--pri); color: #fff; border-bottom-right-radius: 4px; font-weight: 600; }
   .you { align-self: flex-start; background: #e2e8f0; color: var(--text); border-bottom-left-radius: 4px; }
 
-  .chat-input { display: flex; gap: 10px; padding: 12px; background: #ffffff; border-top: 1px solid var(--border); }
+  .chat-input { display: flex; gap: 10px; padding: 12px; background: #ffffff; border-top: 1px solid var(--border); align-items: center; }
   .chat-input input[type="text"] { flex: 1; background: #f1f5f9; border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--text); outline: none; font-size: 14px; }
   .chat-input input[type="text"]:focus { border-color: var(--pri); background: #ffffff; }
 
-  .upl-btn { background: #f1f5f9; border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--pri); font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; }
+  .upl-btn { background: #f1f5f9; border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--pri); font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; white-space: nowrap; }
+
+  /* Redesigned visible Send Button */
+  #sendBtn {
+    background: var(--pri);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.1s;
+  }
+  #sendBtn:hover { background: #0040cc; }
+  #sendBtn:active { transform: scale(0.97); }
 
   footer {
     padding: 14px 24px calc(14px + env(safe-area-inset-bottom));
@@ -155,7 +171,7 @@
             <label class="upl-btn" for="img">Attach</label>
             <input id="img" type="file" accept="image/*" style="display:none"/>
             <input id="text" type="text" placeholder="Send a message..."/>
-            <button id="sendBtn" style="background:none; border:none; color:var(--pri); font-weight:800; padding:0 10px; cursor:pointer;">Send</button>
+            <button id="sendBtn">Send</button>
           </div>
         </div>
       </div>
