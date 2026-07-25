@@ -264,19 +264,7 @@ function renderAds(){
     const trades = (1200 + (i * 45));
 
     if(currentTab==='buy'){
-      // Specific assignments based on index (0-indexed: i=0 is 1st, i=1 is 2nd, etc.)
-      // 0: airtime payment
-      // 1: bank transfer
-      // 2: bank transfer
-      // 3: airtime payment
-      // 4: bank transfer
-      // 5: bank transfer (rest are bank transfers)
-      // 6: airtime payment (7th one, i=6)
-      // 7, 8, 9: bank transfer
       let paymentTagHtml = `<div class="pay-tags"><span class="pay-tag bank">🏦 Bank Transfer</span></div>`;
-      if (i === 0 || i === 3 || i === 6) {
-        paymentTagHtml = `<div class="pay-tags"><span class="pay-tag airtime">📱 Airtime Payment</span></div>`;
-      }
 
       ad.innerHTML=`
         <div class="ad-top">
