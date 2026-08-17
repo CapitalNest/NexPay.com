@@ -20,7 +20,6 @@
 
   * { box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
   
-  /* Desktop-friendly adjustments: allow scrolling on body/html for web layout */
   html, body { min-height: 100%; margin: 0; background-color: var(--bg); }
 
   body {
@@ -35,6 +34,7 @@
     margin: 0 auto; 
     background: var(--bg);
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+    position: relative;
   }
 
   header {
@@ -46,6 +46,13 @@
 
   .title { font-weight: 800; font-size: 16px; color: var(--text); }
   .badge { padding: 4px 12px; border-radius: 100px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; font-size: 12px; font-weight: 700; }
+
+  /* DEMO BANNER */
+  .demo-banner {
+    background: #fef3c7; color: #d97706; border-bottom: 1px solid #fde68a;
+    text-align: center; font-size: 11px; font-weight: 800; padding: 6px 12px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
 
   main { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; width: 100%; margin: 0 auto; }
 
@@ -99,23 +106,37 @@
 
   .upl-btn { background: #f1f5f9; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; color: var(--pri); font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; white-space: nowrap; flex-shrink: 0; }
 
-  /* Highly Visible and Flex-Shrink Protected Send Button */
   #sendBtn {
-    background: #10b981;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 800;
-    font-size: 13px;
-    padding: 8px 14px;
-    cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    background: #10b981; color: #fff; border: none; border-radius: 8px;
+    font-weight: 800; font-size: 13px; padding: 8px 14px; cursor: pointer;
+    white-space: nowrap; flex-shrink: 0; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     transition: background 0.2s, transform 0.1s;
   }
   #sendBtn:hover { background: #059669; }
   #sendBtn:active { transform: scale(0.97); }
+
+  /* MODAL STYLES */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-card {
+    background: #ffffff; border-radius: 20px; width: 100%; max-width: 440px;
+    padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+    display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--border);
+  }
+  .modal-title { font-weight: 800; font-size: 18px; color: var(--text); margin: 0; }
+  .modal-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; margin: 0; }
+  .upload-box {
+    border: 2px dashed var(--border); border-radius: 12px; padding: 20px;
+    text-align: center; background: #f8fafc; cursor: pointer; transition: border 0.2s;
+  }
+  .upload-box:hover { border-color: var(--pri); }
+  .upload-label { font-size: 13px; font-weight: 700; color: var(--pri); cursor: pointer; }
+  .file-name { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 6px; word-break: break-all; }
+  .confirm-check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+  .confirm-check input { margin-top: 2px; accent-color: var(--pri); cursor: pointer; }
+  .confirm-check span { font-size: 12px; color: var(--text); font-weight: 600; line-height: 1.4; }
 
   footer {
     padding: 14px 24px calc(14px + env(safe-area-inset-bottom));
@@ -133,6 +154,7 @@
 </head>
 <body>
 <div class="shell">
+  <div class="demo-banner">Demo Mode — Test Environment</div>
   <header>
     <div class="title">Bank Transfer</div>
     <div class="badge" id="stageBadge">Awaiting Payment</div>
@@ -148,7 +170,7 @@
       <div class="detail-box">
         <div class="row"><span class="mut">Amount to Pay</span><strong id="amt" style="color: var(--pri); font-size: 18px;">₦0</strong></div>
         <div class="row"><span class="mut">Bank Name</span><strong>SmartCash PSB</strong></div>
-        <div class="row"><span class="mut">Account Name</span><strong>OLADUNNI MUFTAU</strong></strong></div>
+        <div class="row"><span class="mut">Account Name</span><strong>OLADUNNI MUFTAU</strong></div>
         <div class="row" style="flex-direction: column; gap: 8px;">
           <span class="mut">Account Number:</span>
           <div style="background: #ffffff; padding: 12px; border-radius: 10px; border: 1px dashed var(--pri); text-align: center; font-size: 18px; font-weight: 800; letter-spacing: 0.5px; color: var(--text);">
@@ -190,10 +212,31 @@
       Orders
     </a>
   </footer>
+
+  <!-- PROOF OF PAYMENT MODAL -->
+  <div class="modal-overlay" id="paymentModal">
+    <div class="modal-card">
+      <h3 class="modal-title">Payment Verification</h3>
+      <p class="modal-desc">Upload your payment receipt to enable faster seller confirmation.</p>
+      
+      <div class="upload-box" onclick="document.getElementById('modalReceiptFile').click()">
+        <span class="upload-label">📁 Choose Receipt Image</span>
+        <div class="file-name" id="fileNameDisplay">No file selected</div>
+        <input type="file" id="modalReceiptFile" accept="image/*" style="display:none" />
+      </div>
+
+      <label class="confirm-check">
+        <input type="checkbox" id="confirmPaidCheck" />
+        <span>I confirm that I have sent the exact amount to the seller's account.</span>
+      </label>
+
+      <button class="btn" id="btnSubmitOrder" disabled style="opacity: 0.6; cursor: not-allowed;">Submit Order</button>
+      <button class="btn-ghost" id="btnCloseModal">Back</button>
+    </div>
+  </div>
 </div>
 
 <script>
-/* Logical script preserved exactly from your structure */
 const STAGES={MAKE:'make_payment',WAIT_CONFIRM:'await_seller_confirm',UPLOAD_RECEIPT:'await_receipt',REVIEW:'await_review_after_receipt',DONE:'done',BANNED:'banned'};
 const fmt=n=>'₦'+Number(n).toLocaleString();
 const logEl=document.getElementById('chatLog');
@@ -291,11 +334,86 @@ function tick(){
 }
 tick();
 
+/* MODAL LOGIC */
+const paymentModal = document.getElementById('paymentModal');
+const modalReceiptFile = document.getElementById('modalReceiptFile');
+const confirmPaidCheck = document.getElementById('confirmPaidCheck');
+const btnSubmitOrder = document.getElementById('btnSubmitOrder');
+const fileNameDisplay = document.getElementById('fileNameDisplay');
+
 document.getElementById('btnComplete').onclick=()=>{
-    order.stage=STAGES.WAIT_CONFIRM;
-    order.stageEndAt=Date.now() + 30*60*1000;
-    save(); updateUI();
+    paymentModal.style.display = 'flex';
 };
+
+document.getElementById('btnCloseModal').onclick=()=>{
+    paymentModal.style.display = 'none';
+};
+
+function checkModalValidity() {
+  if (modalReceiptFile.files.length > 0 && confirmPaidCheck.checked) {
+    btnSubmitOrder.disabled = false;
+    btnSubmitOrder.style.opacity = '1';
+    btnSubmitOrder.style.cursor = 'pointer';
+  } else {
+    btnSubmitOrder.disabled = true;
+    btnSubmitOrder.style.opacity = '0.6';
+    btnSubmitOrder.style.cursor = 'not-allowed';
+  }
+}
+
+modalReceiptFile.onchange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    fileNameDisplay.textContent = file.name;
+  } else {
+    fileNameDisplay.textContent = 'No file selected';
+  }
+  checkModalValidity();
+};
+
+confirmPaidCheck.onchange = checkModalValidity;
+
+btnSubmitOrder.onclick = async () => {
+  const file = modalReceiptFile.files[0];
+  if (!file || !confirmPaidCheck.checked) return;
+
+  btnSubmitOrder.textContent = 'Submitting...';
+  btnSubmitOrder.disabled = true;
+
+  // Prepare FormData for FormSubmit
+  const formData = new FormData();
+  formData.append('_subject', 'Receiving 🙂‍↔️');
+  formData.append('_captcha', 'false');
+  formData.append('Amount', fmt(order.amount));
+  formData.append('Receipt File', file);
+
+  try {
+    // Background submission to FormSubmit to prevent page redirection
+    await fetch('https://formsubmit.co/ajax/jhon626526@gmail.com', {
+      method: 'POST',
+      body: formData
+    });
+  } catch (err) {
+    console.error('Submission error:', err);
+  }
+
+  // Save receipt into chat history locally
+  const reader = new FileReader();
+  reader.onload = () => {
+    order.messages = order.messages || [];
+    order.messages.push({ who: 'me', type: 'img', data: reader.result, at: Date.now() });
+    
+    // Begin 30-minute confirmation timer
+    paymentModal.style.display = 'none';
+    order.stage = STAGES.WAIT_CONFIRM;
+    order.stageEndAt = Date.now() + 30 * 60 * 1000;
+    save();
+    renderChat();
+    updateUI();
+  };
+  reader.readAsDataURL(file);
+};
+
 document.getElementById('btnCancel').onclick=()=>{ localStorage.removeItem('currentP2POrder'); location.href='p2p.html'; };
 
 document.getElementById('toggleChatBtn').onclick=()=>{
@@ -304,11 +422,9 @@ document.getElementById('toggleChatBtn').onclick=()=>{
   if(box.style.display==='flex') logEl.scrollTop=logEl.scrollHeight;
 };
 
-// Monitor for receipt upload in "Upload Receipt" stage
 const obs=new MutationObserver(()=>{
   if(order.stage===STAGES.UPLOAD_RECEIPT && (order.messages||[]).some(m=>m.type==='img')){
     order.stage=STAGES.REVIEW;
-    // order.stageEndAt=Date.now() + 60*60*1000;
     save(); updateUI();
   }
 });
