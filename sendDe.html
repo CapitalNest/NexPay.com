@@ -450,7 +450,7 @@
 
   function selectAsset(asset) {
     if (asset === 'ETH' || asset === 'USDT') {
-      document.getElementById('no-balance-desc').innerHTML = `There is no available <strong>${asset}</strong> balance in your portfolio. Please select <strong>BTC</strong> to proceed.`;
+      document.getElementById('no-balance-desc').innerHTML = `There is no available <strong>${asset}</strong> balance in your portfolio.`;
       document.getElementById('no-balance-modal').classList.add('active');
       return;
     }
