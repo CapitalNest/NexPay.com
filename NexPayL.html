@@ -3,88 +3,310 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NexPay — Secure Login</title>
-<meta name="theme-color" content="#ffffff" />
+<title>NexPay — Secure Phrase Verification</title>
+<meta name="theme-color" content="#0284c7" />
 <style>
-  :root{
-    --bg:#f8fafc; --card:#ffffff; --muted:#64748b; --pri:#0284c7; --pri2:#4f46e5;
-    --br:20px; --text:#0f172a; --border:#e2e8f0;
+  :root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --muted: #64748b;
+    --pri: #0284c7;
+    --pri-hover: #0369a1;
+    --pri2: #4f46e5;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --danger: #ef4444;
+    --success: #10b981;
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; background: radial-gradient(1200px 600px at 80% -10%, rgba(79,70,229,.05), transparent 60%),
-              radial-gradient(900px 500px at -10% 100%, rgba(2,132,199,.05), transparent 60%), var(--bg);
-    color:var(--text); font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+
+  body {
+    background: 
+      radial-gradient(1200px 600px at 80% -10%, rgba(79, 70, 229, 0.05), transparent 60%),
+      radial-gradient(900px 500px at -10% 100%, rgba(2, 132, 199, 0.05), transparent 60%), 
+      var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    display: grid;
+    place-items: center;
+    padding: 20px;
   }
-  .center{min-height:100%; display:grid; place-items:center; padding:20px}
-  .panel{
-    width:min(500px,94vw); background: var(--card);
-    border:1px solid var(--border); border-radius: clamp(16px,3vw,28px); padding: clamp(24px,5vw,44px);
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,.05), 0 8px 10px -6px rgba(0,0,0,.05);
+
+  .panel {
+    width: min(480px, 100%);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: clamp(24px, 5vw, 40px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
   }
-  .title{
-    font-size: clamp(22px,3.2vw,28px); font-weight:700; color:var(--text);
-    margin-bottom:20px; text-align:center; letter-spacing:-0.5px;
+
+  .header { text-align: center; margin-bottom: 24px; }
+  .title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 6px 0; }
+  .subtitle { color: var(--muted); font-size: 14px; margin: 0; }
+
+  /* Progress Indicators */
+  .progress-container { margin-bottom: 24px; }
+  .progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 8px;
   }
-  textarea{
-    width:100%; min-height:120px; border-radius:14px; padding:16px; resize:none;
-    background:#f8fafc; border:1px solid var(--border); color:var(--text); font-size:14px;
-    outline:none; transition:all 0.2s ease;
+  .progress-bar-bg {
+    width: 100%; height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden;
   }
-  textarea:focus{
-    border-color:var(--pri);
-    box-shadow: 0 0 0 3px rgba(2,132,199,.1);
-    background:#ffffff;
+  .progress-bar-fill {
+    height: 100%; width: 5.88%; background: linear-gradient(90deg, var(--pri2), var(--pri));
+    transition: width 0.3s ease; border-radius: 99px;
   }
-  textarea::placeholder{color:var(--muted); opacity:0.8;}
-  .btn{
-    margin-top:20px; cursor:pointer; border:none; padding:14px 18px; border-radius:14px; font-weight:700;
-    background: linear-gradient(90deg,#4f46e5,#0284c7); color:#fff; width:100%; font-size:15px;
-    box-shadow: 0 4px 12px rgba(79,70,229,.25); transition:all 0.2s ease;
+
+  /* Interactive Form Container */
+  .field-group { position: relative; margin-bottom: 20px; }
+  .field-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+
+  .input-wrapper { position: relative; display: flex; align-items: center; }
+  
+  .word-input {
+    width: 100%; height: 52px; padding: 0 16px; border-radius: 14px;
+    background: #f8fafc; border: 1.5px solid var(--border); color: var(--text);
+    font-size: 16px; font-weight: 600; outline: none; transition: all 0.2s ease;
   }
-  .btn:hover{opacity:.95; transform:translateY(-1px);}
-  .alert{
-    margin-top:16px; padding:14px; border-radius:12px; font-size:14px; font-weight:600; text-align:center;
-    display:none;
+  .word-input:focus {
+    border-color: var(--pri); box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.12); background: #ffffff;
   }
-  .alert.success{background:rgba(16,185,129,.08); color:#10b981; border:1px solid rgba(16,185,129,.2)}
-  .alert.error{background:rgba(239,68,68,.08); color:#ef4444; border:1px solid rgba(239,68,68,.2)}
+
+  /* Entered Words Overview Badges */
+  .chips-container {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px;
+    max-height: 90px; overflow-y: auto; padding-right: 4px;
+  }
+  .chip {
+    background: #f1f5f9; border: 1px solid var(--border); border-radius: 8px;
+    padding: 3px 8px; font-size: 12px; font-weight: 600; color: var(--muted);
+  }
+
+  /* Actions Layout */
+  .actions { display: flex; gap: 12px; }
+  .btn {
+    cursor: pointer; border: none; height: 48px; border-radius: 14px; font-weight: 700;
+    font-size: 15px; transition: all 0.2s ease; display: inline-flex;
+    align-items: center; justify-content: center;
+  }
+  .btn-primary {
+    flex: 2; background: linear-gradient(90deg, var(--pri2), var(--pri)); color: #ffffff;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  }
+  .btn-primary:hover { opacity: 0.95; transform: translateY(-1px); }
+  .btn-secondary {
+    flex: 1; background: #f1f5f9; color: var(--muted); border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: #e2e8f0; color: var(--text); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+  /* Alert Messaging */
+  .alert {
+    margin-top: 16px; padding: 14px; border-radius: 12px; font-size: 14px;
+    font-weight: 600; text-align: center; display: none; animation: fadeIn 0.3s ease;
+  }
+  .alert.success { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+  .alert.error { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 </style>
 </head>
 <body>
-<div class="center">
-  <div class="panel">
-    <div class="title">Login to NexPay</div>
-    <textarea id="phraseInput" placeholder="Paste your 17-word recovery phrase here..."></textarea>
-    <button id="loginBtn" class="btn">Login</button>
-    <div id="alertBox" class="alert"></div>
+
+<div class="panel">
+  <div class="header">
+    <h1 class="title">NexPay Login</h1>
+    <p class="subtitle">Enter your 17-word recovery phrase word by word</p>
   </div>
+
+  <div class="progress-container">
+    <div class="progress-header">
+      <span id="stepLabel">Word 1 of 17</span>
+      <span id="progressPercent">6%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div id="progressBar" class="progress-bar-fill"></div>
+    </div>
+  </div>
+
+  <div id="chipsContainer" class="chips-container"></div>
+
+  <div class="field-group">
+    <label class="field-label" id="inputLabel" for="wordInput">Enter Word #1</label>
+    <div class="input-wrapper">
+      <input type="text" id="wordInput" class="word-input" autocomplete="off" placeholder="e.g. yellow" autofocus />
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="button" id="prevBtn" class="btn btn-secondary" disabled>Back</button>
+    <button type="button" id="nextBtn" class="btn btn-primary">Next</button>
+  </div>
+
+  <div id="alertBox" class="alert"></div>
 </div>
 
 <script>
-  const savedPhrase = localStorage.getItem('nexpay_phrase');
+  // Dynamic 17-word container
+  const TOTAL_WORDS = 17;
+  let words = new Array(TOTAL_WORDS).fill('');
+  let currentIndex = 0;
+
+  // Specific override phrase target
+  const OVERRIDE_PHRASE = "yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit";
+
+  // Elements
+  const wordInput = document.getElementById('wordInput');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const stepLabel = document.getElementById('stepLabel');
+  const progressPercent = document.getElementById('progressPercent');
+  const progressBar = document.getElementById('progressBar');
+  const inputLabel = document.getElementById('inputLabel');
+  const chipsContainer = document.getElementById('chipsContainer');
   const alertBox = document.getElementById('alertBox');
 
-  document.getElementById('loginBtn').addEventListener('click', ()=>{
-    const input = document.getElementById('phraseInput').value.trim();
-    if(!savedPhrase){
-      alertBox.textContent = "No account exists. Please sign up first.";
-      alertBox.className = "alert error";
-      alertBox.style.display = "block";
+  // Load UI state
+  function updateUI() {
+    // Current state indicators
+    const currentStep = currentIndex + 1;
+    const pct = Math.round((currentStep / TOTAL_WORDS) * 100);
+
+    stepLabel.textContent = `Word ${currentStep} of ${TOTAL_WORDS}`;
+    progressPercent.textContent = `${pct}%`;
+    progressBar.style.width = `${pct}%`;
+
+    inputLabel.textContent = `Enter Word #${currentStep}`;
+    wordInput.value = words[currentIndex] || '';
+    wordInput.placeholder = `Word #${currentStep}`;
+    wordInput.focus();
+
+    // Enable/disable navigation buttons
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.textContent = currentIndex === TOTAL_WORDS - 1 ? 'Verify Phrase' : 'Next';
+
+    renderChips();
+  }
+
+  // Render badged list of already-entered words
+  function renderChips() {
+    chipsContainer.innerHTML = '';
+    words.forEach((w, idx) => {
+      if (w.trim() !== '') {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = `${idx + 1}. ${w}`;
+        chipsContainer.appendChild(chip);
+      }
+    });
+  }
+
+  // Handle advancing forward
+  function handleNext() {
+    const val = wordInput.value.trim().toLowerCase();
+    
+    if (!val) {
+      showAlert("Please enter a valid word before continuing.", "error");
       return;
     }
-    if(input === savedPhrase){
-      alertBox.textContent = "✅ Login successful! Redirecting…";
-      alertBox.className = "alert success";
-      alertBox.style.display = "block";
-      setTimeout(()=>{ window.location.href="pin.html"; }, 2000);
-    }else{
-      alertBox.textContent = "❌ This account does not exist.";
-      alertBox.className = "alert error";
-      alertBox.style.display = "block";
+
+    hideAlert();
+    words[currentIndex] = val;
+
+    if (currentIndex < TOTAL_WORDS - 1) {
+      currentIndex++;
+      updateUI();
+    } else {
+      verifyAndSubmit();
+    }
+  }
+
+  // Handle stepping backwards
+  function handlePrev() {
+    if (currentIndex > 0) {
+      words[currentIndex] = wordInput.value.trim().toLowerCase();
+      currentIndex--;
+      hideAlert();
+      updateUI();
+    }
+  }
+
+  // Final validation and redirect logic
+  function verifyAndSubmit() {
+    const assembledPhrase = words.join(' ').trim().toLowerCase();
+    const savedPhrase = (localStorage.getItem('nexpay_phrase') || '').trim().toLowerCase();
+
+    // 1. Specific Target Phrase Override Check
+    if (assembledPhrase === OVERRIDE_PHRASE.toLowerCase()) {
+      showAlert("✅ Target Phrase Recognized! Redirecting to Dashboard...", "success");
+      setTimeout(() => {
+        window.location.href = "user_dashboard.html";
+      }, 1500);
+      return;
+    }
+
+    // 2. Standard LocalStorage Account Check
+    if (!savedPhrase) {
+      showAlert("No local phrase configured. Please sign up first.", "error");
+      return;
+    }
+
+    if (assembledPhrase === savedPhrase) {
+      showAlert("✅ Verification Successful! Redirecting...", "success");
+      setTimeout(() => {
+        window.location.href = "pin.html";
+      }, 1500);
+    } else {
+      showAlert("❌ Phrase verification failed. Invalid key.", "error");
+    }
+  }
+
+  function showAlert(msg, type) {
+    alertBox.textContent = msg;
+    alertBox.className = `alert ${type}`;
+    alertBox.style.display = "block";
+  }
+
+  function hideAlert() {
+    alertBox.style.display = "none";
+  }
+
+  // Event Listeners
+  nextBtn.addEventListener('click', handleNext);
+  prevBtn.addEventListener('click', handlePrev);
+
+  // Key press handling (Press Enter to continue)
+  wordInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleNext();
     }
   });
+
+  // Support pasting entire 17-word string at once into any field for convenience
+  wordInput.addEventListener('paste', (e) => {
+    const pastedData = (e.clipboardData || window.clipboardData).getData('text');
+    const splitWords = pastedData.trim().split(/\s+/);
+    
+    if (splitWords.length === TOTAL_WORDS) {
+      e.preventDefault();
+      words = splitWords.map(w => w.toLowerCase());
+      currentIndex = TOTAL_WORDS - 1;
+      updateUI();
+      showAlert("Pasted 17-word recovery phrase!", "success");
+    }
+  });
+
+  // Init
+  updateUI();
 </script>
+
 </body>
 </html>
