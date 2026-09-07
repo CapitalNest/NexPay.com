@@ -101,8 +101,8 @@
 </div>
 
 <script>
-  // 🚨 If already signed up, redirect to login.html
-  if(localStorage.getItem('nexpay_phrase')){
+  // 🚨 Redirect to pin.html ONLY if the user has explicitly clicked "Create account"
+  if(localStorage.getItem('nexpay_account_created') === 'true'){
     window.location.href = "pin.html";
   }
 
@@ -149,6 +149,7 @@
   // Create account
   document.getElementById('create').addEventListener('click', ()=>{
     localStorage.setItem('nexpay_phrase', phrase.join(' '));
+    localStorage.setItem('nexpay_account_created', 'true'); // Set the explicit completion flag
     phraseEl.style.opacity=0;
     setTimeout(()=>{
       phraseEl.style.display="none";
