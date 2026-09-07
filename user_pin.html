@@ -252,7 +252,7 @@ function savePin(){
 function checkPin(){
   if(pinInput === storedPin){
     showAlert("Login successful! Redirecting…","success");
-    setTimeout(()=>window.location.href="dashboard.html",1500);
+    setTimeout(()=>window.location.href="user_dashboard.html",1500);
   }else{
     showAlert("Incorrect PIN","error");
     pinInput="";
