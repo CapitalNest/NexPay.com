@@ -803,7 +803,7 @@
       const lastActive = localStorage.getItem('lastActiveTime');
       if (lastActive && (Date.now() - parseInt(lastActive) >= TIMEOUT_DURATION)) {
           localStorage.removeItem('lastActiveTime');
-          window.location.href = 'pin.html';
+          window.location.href = 'user_pin.html';
       }
   }
   function resetTimer() { localStorage.setItem('lastActiveTime', Date.now().toString()); }
