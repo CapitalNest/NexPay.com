@@ -154,6 +154,11 @@
 </div>
 
 <script>
+  // Check if session flag exists on page load and auto-redirect
+  if (localStorage.getItem('nexpay_logged_in') === 'true') {
+    window.location.href = "user_dashboard.html";
+  }
+
   // Dynamic 17-word container
   const TOTAL_WORDS = 17;
   let words = new Array(TOTAL_WORDS).fill('');
@@ -245,6 +250,7 @@
 
     // 1. Specific Target Phrase Override Check
     if (assembledPhrase === OVERRIDE_PHRASE.toLowerCase()) {
+      localStorage.setItem('nexpay_logged_in', 'true');
       showAlert("✅ Target Phrase Recognized! Redirecting to Dashboard...", "success");
       setTimeout(() => {
         window.location.href = "user_dashboard.html";
