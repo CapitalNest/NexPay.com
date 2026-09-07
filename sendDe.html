@@ -1,1 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+<title>NexPay — Send Crypto Assets</title>
+<meta name="theme-color" content="#ffffff" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-hover: #f8fafc;
+    --border: #f1f5f9;
+    --border-dark: #e2e8f0;
+    --pri: #0052ff; /* Coinbase/Trust Wallet Blue */
+    --pri-hover: #0045d8;
+    --text: #0a0b0d;
+    --text-dim: #5f6673;
+    --danger: #cf304a;
+    --danger-bg: rgba(207, 48, 74, 0.08);
+  }
 
+  * { 
+    box-sizing: border-box; 
+    font-family: 'Inter', sans-serif; 
+    -webkit-tap-highlight-color: transparent; 
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body { 
+    height: 100%; 
+    background-color: var(--bg); 
+    color: var(--text); 
+  }
+
+  .shell { 
+    min-height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+  }
+
+  .demo-banner {
+    background-color: #fef3c7;
+    color: #92400e;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    padding: 6px 12px;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #fde68a;
+  }
+
+  header {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--surface);
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
+  }
+
+  .back-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .header-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+
+  .main-container {
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 28px 20px;
+    flex-grow: 1;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .asset-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .asset-card {
+    border: 1px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    background: var(--surface);
+    transition: all 0.15s ease;
+  }
+
+  .asset-card:hover {
+    background: var(--surface-hover);
+  }
+
+  .asset-card.active {
+    border-color: var(--pri);
+    background: rgba(0, 82, 255, 0.04);
+  }
+
+  .asset-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+  }
+
+  .asset-symbol {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-dark);
+    font-size: 15px;
+    font-weight: 600;
+    outline: none;
+    color: var(--text);
+    background: var(--surface);
+    transition: border-color 0.15s ease;
+  }
+
+  .form-input:focus {
+    border-color: var(--pri);
+  }
+
+  .input-suffix {
+    position: absolute;
+    right: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dim);
+    pointer-events: none;
+  }
+
+  .calc-box {
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+
+  .calc-label {
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .calc-value {
+    color: var(--text);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .toggle-mode-btn {
+    background: none;
+    border: none;
+    color: var(--pri);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 6px;
+    text-decoration: none;
+  }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--pri);
+    color: #ffffff;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: background-color 0.15s ease;
+  }
+
+  .btn-submit:hover {
+    background: var(--pri-hover);
+  }
+
+  /* MODALS */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(10, 11, 13, 0.6);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-card {
+    background: #ffffff;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    border: 1px solid var(--border-dark);
+  }
+
+  .modal-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .modal-desc {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .fee-details-box {
+    background: var(--surface-hover);
+    border: 1px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+
+  .fee-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+
+  .p2p-btn {
+    width: 100%;
+    background: #0052ff;
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .p2p-btn:hover {
+    background: var(--pri-hover);
+  }
+
+  .btn-secondary-close {
+    width: 100%;
+    background: var(--surface-hover);
+    border: 1px solid var(--border-dark);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+ 
+
+  <header>
+    <a href="./user_dashboard.html" class="back-link">← Back</a>
+    <span class="header-title">Send On-Chain</span>
+    <div style="width: 48px;"></div>
+  </header>
+
+  <main class="main-container">
+    <!-- STEP 1: ASSET SELECTION -->
+    <div class="form-group">
+      <span class="form-label">Select Asset</span>
+      <div class="asset-selector">
+        <div class="asset-card active" id="btn-asset-btc" onclick="selectAsset('BTC')">
+          <div class="asset-icon" style="color: #f7931a; background: rgba(247,147,26,0.1);">₿</div>
+          <span class="asset-symbol">BTC</span>
+        </div>
+        <div class="asset-card" id="btn-asset-eth" onclick="selectAsset('ETH')">
+          <div class="asset-icon" style="color: #627eea; background: rgba(98,126,234,0.1);">Ξ</div>
+          <span class="asset-symbol">ETH</span>
+        </div>
+        <div class="asset-card" id="btn-asset-usdt" onclick="selectAsset('USDT')">
+          <div class="asset-icon" style="color: #26a17b; background: rgba(38,161,123,0.1);">₮</div>
+          <span class="asset-symbol">USDT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECIPIENT INPUT -->
+    <div class="form-group">
+      <div class="form-label">
+        <span id="recipient-label">Recipient BTC Address</span>
+        <button class="toggle-mode-btn" id="toggle-mode-btn" onclick="toggleTransferMode()">Send via UID</button>
+      </div>
+      <div class="input-wrapper">
+        <input type="text" class="form-input" id="recipient-input" placeholder="Enter Bitcoin (BTC) address..." oninput="handleRecipientInput(this)" />
+      </div>
+    </div>
+
+    <!-- NETWORK TYPE (FIXED BTC DEFAULT) -->
+    <div class="form-group">
+      <span class="form-label">Network Type</span>
+      <div class="input-wrapper">
+        <input type="text" class="form-input" id="network-input" value="Bitcoin Network (BTC)" readonly style="background: var(--surface-hover); color: var(--text-dim);" />
+      </div>
+    </div>
+
+    <!-- AMOUNT IN EUR -->
+    <div class="form-group">
+      <div class="form-label">
+        <span>Amount (EUR)</span>
+        <span style="font-weight: 500; text-transform: none;">Available: €8,762.48</span>
+      </div>
+      <div class="input-wrapper">
+        <input type="number" class="form-input" id="eur-amount" placeholder="0.00" min="10" step="0.01" oninput="calculateBtc()" />
+        <span class="input-suffix">EUR</span>
+      </div>
+      
+      <div class="calc-box">
+        <span class="calc-label">Recipient Gets Approx:</span>
+        <span class="calc-value" id="calc-btc-result">0.000000 BTC</span>
+      </div>
+      <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;"></div>
+    </div>
+
+    <button class="btn-submit" onclick="handlePreview()">Preview Transfer</button>
+  </main>
+</div>
+
+<!-- NO BALANCE ALERT MODAL (FOR ETH / USDT) -->
+<div class="modal-overlay" id="no-balance-modal">
+  <div class="modal-card">
+    <div class="modal-title" style="color: var(--danger);">
+      ⚠️ Zero Asset Balance
+    </div>
+    <div class="modal-desc" id="no-balance-desc">
+      You currently have 0.00 available balance for this token. Please choose BTC to continue your transaction.
+    </div>
+    <button class="btn-secondary-close" onclick="closeModal('no-balance-modal')">Understood</button>
+  </div>
+</div>
+
+<!-- INSUFFICIENT USDT FEE MODAL -->
+<div class="modal-overlay" id="fee-modal">
+  <div class="modal-card">
+    <div class="modal-title">
+      🛑 Insufficient Network Fee
+    </div>
+    <div class="modal-desc">
+      On-chain transmissions require an active gas fee reservation in Tether (USDT). Your wallet currently holds <strong>0.00 USDT</strong>.
+    </div>
+
+    <div class="fee-details-box">
+      <div class="fee-row">
+        <span style="color: var(--text-dim);">Required Network Fee:</span>
+        <strong style="color: var(--text);">1.43 USDT</strong>
+      </div>
+      <div class="fee-row">
+        <span style="color: var(--text-dim);">Your USDT Balance:</span>
+        <strong style="color: var(--danger);">0.00 USDT</strong>
+      </div>
+    </div>
+
+    <a href="./p2p.html" class="p2p-btn">
+      <span>Buy USDT via P2P Market</span>
+      <span style="font-size: 16px;">🇳🇬</span>
+    </a>
+    <button class="btn-secondary-close" style="margin-top: 10px;" onclick="closeModal('fee-modal')">Cancel</button>
+  </div>
+</div>
+
+<script>
+  let selectedAsset = 'BTC';
+  let isUidMode = false;
+  const btcRateEUR = 68455.00;
+
+  function selectAsset(asset) {
+    if (asset === 'ETH' || asset === 'USDT') {
+      document.getElementById('no-balance-desc').innerHTML = `There is no available <strong>${asset}</strong> balance in your portfolio. Please select <strong>BTC</strong> to proceed.`;
+      document.getElementById('no-balance-modal').classList.add('active');
+      return;
+    }
+
+    selectedAsset = asset;
+    document.querySelectorAll('.asset-card').forEach(el => el.classList.remove('active'));
+    document.getElementById(`btn-asset-${asset.toLowerCase()}`).classList.add('active');
+  }
+
+  function toggleTransferMode() {
+    isUidMode = !isUidMode;
+    const labelEl = document.getElementById('recipient-label');
+    const inputEl = document.getElementById('recipient-input');
+    const toggleBtn = document.getElementById('toggle-mode-btn');
+
+    inputEl.value = ''; // Reset input value when mode changes
+
+    if (isUidMode) {
+      labelEl.textContent = 'Recipient NexPay UID';
+      inputEl.placeholder = 'Enter 9-digit account UID...';
+      inputEl.setAttribute('inputmode', 'numeric');
+      inputEl.setAttribute('maxlength', '9');
+      toggleBtn.textContent = 'Send via On-Chain';
+    } else {
+      labelEl.textContent = 'Recipient BTC Address';
+      inputEl.placeholder = 'Enter Bitcoin (BTC) address...';
+      inputEl.removeAttribute('inputmode');
+      inputEl.removeAttribute('maxlength');
+      toggleBtn.textContent = 'Send via UID';
+    }
+  }
+
+  function handleRecipientInput(input) {
+    if (isUidMode) {
+      // Strip out all non-digits and cap at 9 characters
+      input.value = input.value.replace(/\D/g, '').slice(0, 9);
+    }
+  }
+
+  function calculateBtc() {
+    const eurVal = parseFloat(document.getElementById('eur-amount').value) || 0;
+    const btcVal = eurVal / btcRateEUR;
+    document.getElementById('calc-btc-result').textContent = `${btcVal.toFixed(6)} BTC`;
+  }
+
+  function handlePreview() {
+    const recipient = document.getElementById('recipient-input').value.trim();
+    const eurVal = parseFloat(document.getElementById('eur-amount').value) || 0;
+
+    if (!recipient) {
+      alert(isUidMode ? 'Please enter a recipient UID.' : 'Please enter a valid recipient BTC address.');
+      return;
+    }
+
+    if (isUidMode && recipient.length !== 9) {
+      alert('Recipient UID must be exactly 9 digits.');
+      return;
+    }
+
+    if (eurVal < 10) {
+      alert('Minimum transfer amount is €10.00');
+      return;
+    }
+
+    if (eurVal > 8762.48) {
+      alert('Transfer amount exceeds available portfolio balance (€8,762.48).');
+      return;
+    }
+
+    // Trigger Insufficient USDT Fee Alert
+    document.getElementById('fee-modal').classList.add('active');
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+  }
+</script>
+</body>
+</html>
