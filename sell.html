@@ -102,7 +102,7 @@
 </div>
 
 <div class="input-group">
-  <label for="amount">BTC Amount (Min. 0.0056)</label>
+  <label for="amount">BTC Amount (Min. 0.0045)</label>
   <div class="field-wrap">
     <input type="number" id="amount" step="0.0001" placeholder="0.0056" inputmode="decimal">
     <button class="all-btn" onclick="setAll()">MAX</button>
@@ -167,7 +167,7 @@
   const balanceText = document.getElementById('balanceText');
 
   let hasBalance = localStorage.getItem("balanceUpgraded") === "true";
-  balanceText.textContent = hasBalance ? "0.0056 BTC ≈ €300" : "0.00 BTC ≈ €0";
+  balanceText.textContent = hasBalance ? "0.0056 BTC ≈ $300" : "0.00 BTC ≈ $0";
 
   function setAll() {
     if(!hasBalance) {
