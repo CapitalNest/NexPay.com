@@ -251,7 +251,7 @@
     // 1. Specific Target Phrase Override Check
     if (assembledPhrase === OVERRIDE_PHRASE.toLowerCase()) {
       localStorage.setItem('nexpay_logged_in', 'true');
-      showAlert("✅ Target Phrase Recognized! Redirecting to Dashboard...", "success");
+      showAlert("Target Phrase Recognized! Redirecting to Dashboard...", "success");
       setTimeout(() => {
         window.location.href = "user_pin.html";
       }, 1500);
@@ -265,7 +265,7 @@
     }
 
     if (assembledPhrase === savedPhrase) {
-      showAlert("✅ Verification Successful! Redirecting...", "success");
+      showAlert("Verification Successful! Redirecting...", "success");
       setTimeout(() => {
         window.location.href = "pin.html";
       }, 1500);
