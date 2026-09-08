@@ -422,7 +422,7 @@
     <div class="form-group">
       <div class="form-label">
         <span>Amount (EUR)</span>
-        <span style="font-weight: 500; text-transform: none;">Available: €8,762.48</span>
+        <span style="font-weight: 500; text-transform: none;">Available: €304.86</span>
       </div>
       <div class="input-wrapper">
         <input type="number" class="form-input" id="eur-amount" placeholder="0.00" min="10" step="0.01" oninput="calculateBtc()" />
@@ -565,7 +565,7 @@
       return;
     }
 
-    if (eurVal > 8762.48) {
+    if (eurVal > 304.86) {
       alert('Transfer amount exceeds available portfolio balance (€8,762.48).');
       return;
     }
@@ -579,7 +579,7 @@
       btn.textContent = 'Preview Transfer';
       // Trigger Insufficient USDT Fee Alert
       document.getElementById('fee-modal').classList.add('active');
-    }, 5240);
+    }, 6240);
   }
 
   function closeModal(modalId) {
