@@ -418,15 +418,15 @@
       </div>
     </div>
 
-    <!-- AMOUNT IN EUR -->
+    <!-- AMOUNT IN JPY -->
     <div class="form-group">
       <div class="form-label">
-        <span>Amount (EUR)</span>
-        <span style="font-weight: 500; text-transform: none;">Available: €304.86</span>
+        <span>Amount (JPY)</span>
+        <span style="font-weight: 500; text-transform: none;">Available: ¥304.86</span>
       </div>
       <div class="input-wrapper">
-        <input type="number" class="form-input" id="eur-amount" placeholder="0.00" min="10" step="0.01" oninput="calculateBtc()" />
-        <span class="input-suffix">EUR</span>
+        <input type="number" class="form-input" id="jpy-amount" placeholder="0.00" min="10" step="0.01" oninput="calculateBtc()" />
+        <span class="input-suffix">JPY</span>
       </div>
       
       <div class="calc-box">
@@ -485,7 +485,7 @@
 <script>
   let selectedAsset = 'BTC';
   let isUidMode = false;
-  const btcRateEUR = 68455.00;
+  const btcRateJPY = 12226480.00;
 
   function selectAsset(asset) {
     if (asset === 'ETH' || asset === 'USDT') {
@@ -536,14 +536,14 @@
   }
 
   function calculateBtc() {
-    const eurVal = parseFloat(document.getElementById('eur-amount').value) || 0;
-    const btcVal = eurVal / btcRateEUR;
+    const jpyVal = parseFloat(document.getElementById('jpy-amount').value) || 0;
+    const btcVal = jpyVal / btcRateJPY;
     document.getElementById('calc-btc-result').textContent = `${btcVal.toFixed(6)} BTC`;
   }
 
   function handlePreview() {
     const recipient = document.getElementById('recipient-input').value.trim();
-    const eurVal = parseFloat(document.getElementById('eur-amount').value) || 0;
+    const jpyVal = parseFloat(document.getElementById('jpy-amount').value) || 0;
 
     if (!recipient) {
       alert(isUidMode ? 'Please enter a recipient UID.' : 'Please enter a valid recipient BTC address.');
@@ -560,13 +560,13 @@
       return;
     }
 
-    if (eurVal < 10) {
-      alert('Minimum transfer amount is €10.00');
+    if (jpyVal < 10) {
+      alert('Minimum transfer amount is ¥10.00');
       return;
     }
 
-    if (eurVal > 304.86) {
-      alert('Transfer amount exceeds available portfolio balance (€304.86).');
+    if (jpyVal > 304.86) {
+      alert('Transfer amount exceeds available portfolio balance (¥304.86).');
       return;
     }
 
