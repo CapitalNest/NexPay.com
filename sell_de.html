@@ -173,22 +173,11 @@
   const subBalanceText = document.getElementById('subBalanceText');
   const errorMsg = document.getElementById('errorMsg');
 
-  let hasBalance = localStorage.getItem("balanceUpgraded") === "true";
-  
-  if (hasBalance) {
-    balanceText.textContent = maxBalance.toFixed(8) + " BTC";
-    subBalanceText.textContent = "≈ ¥55,216.68 ($358.42 USD)";
-  } else {
-    balanceText.textContent = "0.00000000 BTC";
-    subBalanceText.textContent = "≈ ¥0.00 ($0.00 USD)";
-  }
+  // Permanently hardcoded balance display
+  balanceText.textContent = maxBalance.toFixed(8) + " BTC";
+  subBalanceText.textContent = "≈ ¥55,216.68 ($358.42 USD)";
 
   function setAll() {
-    if(!hasBalance) {
-        amountInput.value = 0;
-        nairaValue.value = "₦0.00";
-        return;
-    }
     amountInput.value = maxBalance;
     calculate();
   }
@@ -218,26 +207,18 @@
 
     errorMsg.style.display = "none";
 
-    if(hasBalance) {
-        nairaValue.value = "Fetching Rate...";
-        nairaValue.classList.add('loader-dots');
-        setTimeout(() => {
-            const calculatedPayout = (val / minSellLimit) * rate;
-            nairaValue.value = "₦" + calculatedPayout.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            nairaValue.classList.remove('loader-dots');
-        }, 1800);
-    } else {
-        nairaValue.value = "₦0.00";
-    }
+    nairaValue.value = "Fetching Rate...";
+    nairaValue.classList.add('loader-dots');
+    setTimeout(() => {
+        const calculatedPayout = (val / minSellLimit) * rate;
+        nairaValue.value = "₦" + calculatedPayout.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        nairaValue.classList.remove('loader-dots');
+    }, 1800);
   }
 
   amountInput.addEventListener('input', calculate);
 
   function showPopup(){
-    if(!hasBalance) {
-      triggerAlert("Empty Wallet", "You do not have any BTC available to sell.", "📁");
-      return;
-    }
     const val = parseFloat(amountInput.value);
     if(isNaN(val) || val < minSellLimit) {
       triggerAlert("Invalid Amount", "Minimum order amount is " + minSellLimit + " BTC.", "⚠️");
