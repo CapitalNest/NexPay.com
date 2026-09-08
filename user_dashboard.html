@@ -185,10 +185,19 @@
     font-weight: 800;
     letter-spacing: -1.5px;
     color: var(--text);
-    margin: 8px 0;
+    margin: 8px 0 2px 0;
     font-variant-numeric: tabular-nums;
     display: flex;
     align-items: baseline;
+  }
+
+  /* USD CONVERSION SUBTEXT */
+  .portfolio-fiat-subtext {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    letter-spacing: -0.2px;
   }
 
   /* PROFESSIONAL CURRENCY SYMBOL STYLING */
@@ -566,6 +575,7 @@
       <div class="hero-portfolio">
         <span class="portfolio-label">Total Portfolio Value</span>
         <div id="balance" class="portfolio-amount"><span class="currency-symbol">¥</span>55,216.42</div>
+        <div class="portfolio-fiat-subtext">≈ $358.42</div>
         <div class="uid-pill" id="copy-uid">
           <span id="uid-text">UID: Click to copy account UID</span>
         </div>
@@ -686,8 +696,8 @@
   }
 
   const WHITELISTED_UIDS = ["675390256", "702948942"];
-  const upgradeAmount = 8762.48;
-  const upgradeBtc = 0.127996;
+  const upgradeAmount = 55216.42;
+  const upgradeBtc = 0.004567;
 
   let currentUid = localStorage.getItem("nexpay_uid");
   if (currentUid && uidTextEl) {
@@ -782,14 +792,14 @@
 
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // GEOLOCATION NOTIFICATION LOGIC (Triggers on first visit)
+  // GEOLOCATION NOTIFICATION LOGIC (Triggers after 4.23s on first visit)
   const geoModal = document.getElementById('geo-modal');
   const dismissBtn = document.getElementById('dismiss-geo-modal');
 
   if (!localStorage.getItem('nexpay_geo_acknowledged')) {
     setTimeout(() => {
       geoModal.classList.add('active');
-    }, 800);
+    }, 4230);
   }
 
   dismissBtn.addEventListener('click', () => {
