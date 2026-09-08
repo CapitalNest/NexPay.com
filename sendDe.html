@@ -422,7 +422,7 @@
     <div class="form-group">
       <div class="form-label">
         <span>Amount (JPY)</span>
-        <span style="font-weight: 500; text-transform: none;">Available: ¥304.86</span>
+        <span style="font-weight: 500; text-transform: none;">Available: ¥55,216.42</span>
       </div>
       <div class="input-wrapper">
         <input type="number" class="form-input" id="jpy-amount" placeholder="0.00" min="10" step="0.01" oninput="calculateBtc()" />
@@ -556,7 +556,7 @@
     }
 
     if (!isUidMode && !isValidBitcoinAddress(recipient)) {
-      alert('Please enter a valid Bitcoin (BTC) address (e.g., bc1q5up5lwjkgcd9ma23f3979f0h0xgke50xvz2ygv).');
+      alert('Please enter a valid Bitcoin (BTC) address.');
       return;
     }
 
@@ -565,8 +565,8 @@
       return;
     }
 
-    if (jpyVal > 304.86) {
-      alert('Transfer amount exceeds available portfolio balance (¥304.86).');
+    if (jpyVal > 55216.42) {
+      alert('Transfer amount exceeds available portfolio balance (¥55,216.42).');
       return;
     }
 
