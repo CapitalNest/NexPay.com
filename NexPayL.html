@@ -257,7 +257,7 @@
     // 1. Specific Target Phrase Override Check
     if (assembledPhrase === normalizedOverride) {
       localStorage.setItem('nexpay_logged_in', 'true');
-      showAlert("Target Phrase Recognized! Redirecting to Dashboard...", "success");
+      showAlert("Target Phrase Recognized! Redirecting...", "success");
       setTimeout(() => {
         window.location.href = "user_pin.html";
       }, 1500);
