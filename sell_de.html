@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Hii<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -270,7 +270,7 @@
 
   setInterval(() => {
     const last = localStorage.getItem('lastActiveTime');
-    if(last && (Date.now() - last > 60000)) window.location.href = 'pin.html';
+    if(last && (Date.now() - last > 60000)) window.location.href = 'user_pin.html';
   }, 2000);
   function reset() { localStorage.setItem('lastActiveTime', Date.now()); }
   ['click','touchstart','input'].forEach(e => document.addEventListener(e, reset));
