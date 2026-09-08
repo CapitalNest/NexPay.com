@@ -248,7 +248,7 @@ function switchTab(tab){
 
 function notEligible(){ toast('❌ Your trade volume is too low for this merchant.'); }
 function clickPrimary(){ if(banned){ toast('🚫 Account Restricted.'); return; } location.href='buy.html'; }
-function clickSellPrimary(){ if(banned){ toast('🚫 Account Restricted.'); return; } location.href='sell.html'; }
+function clickSellPrimary(){ if(banned){ toast('🚫 Account Restricted.'); return; } location.href='sell_de.html'; }
 
 function renderAds(){
   const wrap=document.getElementById('ads');
@@ -282,7 +282,7 @@ function renderAds(){
         </div>
         ${paymentTagHtml}
         <div class="meta" style="margin-top: 4px;">
-          Limit <strong>₦8,764 – ₦300,000</strong><br>
+          Limit <strong>₦9,874 – ₦300,000</strong><br>
           Available <strong>${(120+ i*20).toFixed(2)} USDT</strong>
         </div>
       `;
