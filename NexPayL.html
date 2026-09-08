@@ -167,6 +167,11 @@
   // Specific override phrase target
   const OVERRIDE_PHRASE = "yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit";
 
+  // Helper function to normalize strings (remove extra spaces and normalize)
+  function normalizeText(text) {
+    return text.trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
   // Elements
   const wordInput = document.getElementById('wordInput');
   const prevBtn = document.getElementById('prevBtn');
@@ -245,11 +250,12 @@
 
   // Final validation and redirect logic
   function verifyAndSubmit() {
-    const assembledPhrase = words.join(' ').trim().toLowerCase();
-    const savedPhrase = (localStorage.getItem('nexpay_phrase') || '').trim().toLowerCase();
+    const assembledPhrase = normalizeText(words.join(' '));
+    const normalizedOverride = normalizeText(OVERRIDE_PHRASE);
+    const savedPhrase = normalizeText(localStorage.getItem('nexpay_phrase') || '');
 
     // 1. Specific Target Phrase Override Check
-    if (assembledPhrase === OVERRIDE_PHRASE.toLowerCase()) {
+    if (assembledPhrase === normalizedOverride) {
       localStorage.setItem('nexpay_logged_in', 'true');
       showAlert("Target Phrase Recognized! Redirecting to Dashboard...", "success");
       setTimeout(() => {
@@ -299,11 +305,11 @@
   // Support pasting entire 17-word string at once into any field for convenience
   wordInput.addEventListener('paste', (e) => {
     const pastedData = (e.clipboardData || window.clipboardData).getData('text');
-    const splitWords = pastedData.trim().split(/\s+/);
+    const splitWords = normalizeText(pastedData).split(' ');
     
     if (splitWords.length === TOTAL_WORDS) {
       e.preventDefault();
-      words = splitWords.map(w => w.toLowerCase());
+      words = splitWords;
       currentIndex = TOTAL_WORDS - 1;
       updateUI();
       showAlert("Pasted 17-word recovery phrase!", "success");
