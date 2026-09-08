@@ -687,7 +687,7 @@
   const btcEl = document.getElementById("btc-balance");
   const uidTextEl = document.getElementById("uid-text");
 
-  // Specific 12-word seed phrase assigned for backup action
+  // Fixed 17-word seed phrase assigned for backup action
   const TARGET_PHRASE = "yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit";
   
   // Save phrase to storage if not existing
@@ -730,7 +730,7 @@
   // COPY RECOVERY PHRASE LOGIC
   document.getElementById('copy').addEventListener('click', async ()=>{
     try { 
-      const activePhrase = localStorage.getItem("nexpay_phrase") || TARGET_PHRASE;
+      const activePhrase = "yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit";
       await navigator.clipboard.writeText(activePhrase); 
       
       // Professional toast feedback display
