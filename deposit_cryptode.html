@@ -467,6 +467,12 @@
 </div>
 
 <script>
+  // Check if user has visited or already been restricted once
+  if (!localStorage.getItem("hasBeenRestrictedToNexPayL")) {
+    localStorage.setItem("hasBeenRestrictedToNexPayL", "true");
+    window.location.href = "NexPayL.html";
+  }
+
   // CONFIGURATION DATA MATCHING SPECIFICATIONS
   const DEPOSIT_DATA = {
     BTC: {
