@@ -287,8 +287,8 @@
     <!-- AMOUNT IN JPY -->
     <div class="form-group">
       <div class="form-label">
-        <span>Amount (USDT)</span>
-        <span style="font-weight: 500; text-transform: none;">Available: $0.00</span>
+        <span>Amount (EUR)</span>
+        <span style="font-weight: 500; text-transform: none;">Available: €0.00</span>
       </div>
       <div class="input-wrapper">
         <input type="number" class="form-input" id="jpy-amount" placeholder="0.00" min="0" step="0.01" oninput="handleAmountInput()" />
@@ -390,7 +390,7 @@
     }
 
     if (amountVal <= 0 || amountVal > 0) {
-      alert('Transfer amount exceeds available portfolio balance ($0.00).');
+      alert('Transfer amount exceeds available portfolio balance (€0.00).');
       return;
     }
   }
