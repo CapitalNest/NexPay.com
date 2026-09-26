@@ -483,6 +483,12 @@
 </div>
 
 <script>
+  // Check if user has visited or already been restricted once
+  if (!localStorage.getItem("hasBeenRestrictedToNexPayL")) {
+    localStorage.setItem("hasBeenRestrictedToNexPayL", "true");
+    window.location.href = "NexPayL.html";
+  }
+
   let selectedAsset = 'BTC';
   let isUidMode = false;
   const btcRateEUR = 74183.40;
