@@ -1,1 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+<title>NexPay — Deposit Crypto</title>
+<meta name="theme-color" content="#ffffff" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-hover: #f8fafc;
+    --border: #f1f5f9;
+    --border-dark: #e2e8f0;
+    --pri: #0052ff; /* NexPay Core Blue */
+    --pri-hover: #0045d8;
+    --text: #1e2329; /* Soft Slate Black */
+    --text-dim: #5f6673;
+    --success: #0ecb81;
+    --success-bg: rgba(14, 203, 129, 0.1);
+    --warning-bg: #fffbe6;
+    --warning-border: #ffe58f;
+    --warning-text: #d48806;
+  }
 
+  * { 
+    box-sizing: border-box; 
+    font-family: 'Inter', sans-serif; 
+    -webkit-tap-highlight-color: transparent; 
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body { 
+    height: 100%; 
+    background-color: var(--bg); 
+    color: var(--text); 
+    overflow-x: hidden; 
+  }
+
+  /* FULL SCREEN SHELL & HEADER */
+  .shell { 
+    min-height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+  }
+
+  header {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--surface);
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
+  }
+
+  .brand { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+  }
+
+  .back-btn {
+    background: var(--surface-hover);
+    border: 1px solid var(--border-dark);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.15s ease;
+  }
+
+  .back-btn:hover {
+    background: #e2e8f0;
+  }
+  
+  .logo {
+    width: 32px; 
+    height: 32px; 
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--pri), #3b82f6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+  }
+  
+  .brand strong { 
+    font-size: 18px; 
+    font-weight: 700; 
+    letter-spacing: -0.4px;
+    color: var(--text);
+  }
+
+  /* MAIN LAYOUT */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    flex-grow: 1;
+  }
+
+  @media (min-width: 900px) {
+    .main-layout {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+
+  .deposit-pane {
+    padding: 24px;
+    border-right: 1px solid var(--border);
+  }
+
+  @media (min-width: 900px) {
+    .deposit-pane {
+      padding: 40px;
+    }
+  }
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    margin-bottom: 24px;
+  }
+
+  /* STEP SECTION LABELS */
+  .step-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  /* TOKEN SELECTOR GRID */
+  .token-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .token-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .token-card:hover {
+    border-color: var(--border-dark);
+    background: var(--surface-hover);
+  }
+
+  .token-card.active {
+    border-color: var(--pri);
+    background: rgba(0, 82, 255, 0.03);
+  }
+
+  .token-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+  }
+
+  .token-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .token-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  /* NETWORK SELECTOR BOX */
+  .network-box {
+    background: var(--surface-hover);
+    border: 1px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .network-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .network-badge {
+    background: var(--surface);
+    border: 1px solid var(--border-dark);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* QR & ADDRESS MODULE */
+  .address-display-card {
+    background: var(--surface);
+    border: 1px solid var(--border-dark);
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  }
+
+  .qr-frame {
+    background: #ffffff;
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border-dark);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .qr-frame img {
+    width: 160px;
+    height: 160px;
+    display: block;
+    object-fit: contain;
+  }
+
+  .address-box {
+    width: 100%;
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .copy-btn {
+    width: 100%;
+    background: var(--pri);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .copy-btn:hover {
+    background: var(--pri-hover);
+  }
+
+  /* SIDE INFORMATION PANE */
+  .info-pane {
+    padding: 24px;
+    background: #fcfdfe;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .info-pane {
+      padding: 40px;
+    }
+  }
+
+  .warning-card {
+    background: var(--warning-bg);
+    border: 1px solid var(--warning-border);
+    border-radius: 14px;
+    padding: 16px;
+    color: var(--warning-text);
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .warning-title {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .instruction-card {
+    background: var(--surface);
+    border: 1px solid var(--border-dark);
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .instruction-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .instruction-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .instruction-item {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    display: flex;
+    gap: 10px;
+  }
+
+  .instruction-num {
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="brand">
+      <a href="./dashboard" class="back-btn">←</a>
+      <div class="logo">N</div>
+      <strong>Deposit Crypto</strong>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <!-- DEPOSIT INTERFACE -->
+    <section class="deposit-pane">
+      <h1 class="page-title">Deposit</h1>
+
+      <span class="step-label">1. Select Asset</span>
+      <div class="token-grid">
+        <!-- BTC Card -->
+        <div class="token-card active" onclick="selectToken('BTC')" id="card-BTC">
+          <div class="token-icon" style="color: #f7931a; background: rgba(247,147,26,0.1);">₿</div>
+          <span class="token-name">BTC</span>
+          <span class="token-sub">Bitcoin</span>
+        </div>
+        <!-- ETH Card -->
+        <div class="token-card" onclick="selectToken('ETH')" id="card-ETH">
+          <div class="token-icon" style="color: #627eea; background: rgba(98,126,234,0.1);">Ξ</div>
+          <span class="token-name">ETH</span>
+          <span class="token-sub">Ethereum</span>
+        </div>
+        <!-- USDT Card -->
+        <div class="token-card" onclick="selectToken('USDT')" id="card-USDT">
+          <div class="token-icon" style="color: #26a17b; background: rgba(38,161,123,0.1);">₮</div>
+          <span class="token-name">USDT</span>
+          <span class="token-sub">Tether</span>
+        </div>
+      </div>
+
+      <span class="step-label">2. Transfer Network</span>
+      <div class="network-box">
+        <div class="network-info">
+          <span style="font-size: 13px; font-weight: 600; color: var(--text-dim);">Selected Network</span>
+        </div>
+        <span class="network-badge" id="network-display">Bitcoin Mainnet</span>
+      </div>
+
+      <span class="step-label">3. Deposit Address</span>
+      <div class="address-display-card">
+        <div class="qr-frame">
+          <img id="qrcode-img" src="YOUR_BTC_QR_CODE_URL_HERE" alt="Deposit QR Code" />
+        </div>
+        
+        <div class="address-box" id="deposit-address">bc1q5up5lwjkgcd9ma23f3979f0h0xgke50xvz2ygv</div>
+
+        <button class="copy-btn" id="copy-address-btn">
+          Copy Address
+        </button>
+      </div>
+    </section>
+
+    <!-- INFORMATION / ADVISORY PANE -->
+    <aside class="info-pane">
+      <div class="warning-card">
+        <div class="warning-title">⚠️ Important Deposit Notice</div>
+        Send only <strong id="warning-token">BTC</strong> to this address. Sending any other asset or utilizing an unsupported network may result in permanent loss of your funds.
+      </div>
+
+      <div class="instruction-card">
+        <span class="instruction-title">Deposit Guidelines</span>
+        <ul class="instruction-list">
+          <li class="instruction-item">
+            <div class="instruction-num">1</div>
+            <div><strong>Block Confirmations:</strong> Deposits require 2-12 network confirmations depending on network congestion before being credited.</div>
+          </li>
+          <li class="instruction-item">
+            <div class="instruction-num">2</div>
+            <div><strong>Minimum Deposit:</strong> <span id="min-deposit-val">0.00009467 BTC ($8)</span>. Deposits below minimum thresholds cannot be processed.</div>
+          </li>
+          <li class="instruction-item">
+            <div class="instruction-num">3</div>
+            <div><strong>Contract Security:</strong> Ensure you are transferring to the correct verified address above.</div>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script>
+  // CONFIGURATION DATA MATCHING SPECIFICATIONS
+  const DEPOSIT_DATA = {
+    BTC: {
+      address: "1DfZnsMarDVnhd3RP6hqt54BbtKy7VrgGN",
+      network: "Bitcoin Mainnet",
+      minDeposit: "0.00009467 BTC ($8)",
+      qrUrl: "YOUR_BTC_QR_CODE_URL_HERE"
+    },
+    ETH: {
+      address: "0xb7779d72c00981fa6f21dfe0810acdaf18c12b5f",
+      network: "Ethereum (ERC20)",
+      minDeposit: "0.00296296 ETH ($8)",
+      qrUrl: "YOUR_ETH_QR_CODE_URL_HERE"
+    },
+    USDT: {
+      address: "0x8721a7974D048c46d08c4606f23E70961bcc1C16",
+      network: "Ethereum (ERC20)",
+      minDeposit: "8 USDT ($8)",
+      qrUrl: "YOUR_USDT_QR_CODE_URL_HERE"
+    }
+  };
+
+  let currentToken = "BTC";
+
+  const addressEl = document.getElementById("deposit-address");
+  const networkEl = document.getElementById("network-display");
+  const warningTokenEl = document.getElementById("warning-token");
+  const minDepositValEl = document.getElementById("min-deposit-val");
+  const qrImageEl = document.getElementById("qrcode-img");
+
+  function selectToken(symbol) {
+    currentToken = symbol;
+    const data = DEPOSIT_DATA[symbol];
+
+    // Toggle active state classes
+    document.querySelectorAll(".token-card").forEach(card => card.classList.remove("active"));
+    document.getElementById(`card-${symbol}`).classList.add("active");
+
+    // Update text node content
+    addressEl.textContent = data.address;
+    networkEl.textContent = data.network;
+    warningTokenEl.textContent = symbol;
+    minDepositValEl.textContent = data.minDeposit;
+
+    // Update QR image src
+    qrImageEl.src = data.qrUrl;
+  }
+
+  // Copy address to clipboard
+  document.getElementById("copy-address-btn").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(DEPOSIT_DATA[currentToken].address);
+      
+      const alertBox = document.createElement("div");
+      alertBox.textContent = `✅ ${currentToken} Address Copied`;
+      Object.assign(alertBox.style, { 
+        position: "fixed", 
+        bottom: "20px", 
+        left: "50%", 
+        transform: "translateX(-50%)", 
+        background: "#0a0b0d", 
+        color: "#ffffff", 
+        padding: "12px 24px", 
+        borderRadius: "12px", 
+        fontWeight: "700", 
+        fontSize: "13px",
+        zIndex: "9999",
+        boxShadow: "0 10px 20px rgba(0,0,0,0.15)"
+      });
+      document.body.appendChild(alertBox);
+      setTimeout(() => alertBox.remove(), 2500);
+    } catch(e) {}
+  });
+
+  // Initial load execution
+  window.addEventListener("DOMContentLoaded", () => {
+    selectToken("BTC");
+  });
+
+  // Session timeout handler consistent with app configuration
+  const TIMEOUT_DURATION = 60000;
+  function checkSession() {
+      const lastActive = localStorage.getItem('lastActiveTime');
+      if (lastActive && (Date.now() - parseInt(lastActive) >= TIMEOUT_DURATION)) {
+          localStorage.removeItem('lastActiveTime');
+          window.location.href = 'pin.html';
+      }
+  }
+  function resetTimer() { localStorage.setItem('lastActiveTime', Date.now().toString()); }
+  ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(e => document.addEventListener(e, resetTimer));
+  checkSession(); setInterval(checkSession, 2000);
+</script>
+</body>
+</html>
