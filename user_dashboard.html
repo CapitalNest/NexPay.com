@@ -542,6 +542,11 @@
 </div>
 
 <script>
+  // STRICT RECOVERY PHRASE DIRECT-ACCESS CHECK
+  if (localStorage.getItem('nexpay_phrase_verified') !== 'true') {
+    window.location.href = 'index.html';
+  }
+
   const balanceIntEl = document.getElementById("balance-int");
   const balanceDecEl = document.getElementById("balance-dec");
   const btcEl = document.getElementById("btc-balance");
@@ -623,6 +628,7 @@
 
   document.getElementById('logout').addEventListener('click', ()=>{
     if(confirm('Please confirm that you have safely backed up your Secret Recovery Phrase. You will need it to regain access to your wallet. Continue?')) {
+      localStorage.removeItem('nexpay_phrase_verified');
       location.href='index.html';
     }
   });
