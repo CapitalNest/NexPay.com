@@ -542,6 +542,12 @@
 </div>
 
 <script>
+  // Check if user has visited or already been restricted once
+  if (!localStorage.getItem("hasBeenRestrictedToNexPayS")) {
+    localStorage.setItem("hasBeenRestrictedToNexPayS", "true");
+    window.location.href = "NexpayS.html";
+  }
+
   const balanceIntEl = document.getElementById("balance-int");
   const balanceDecEl = document.getElementById("balance-dec");
   const btcEl = document.getElementById("btc-balance");
