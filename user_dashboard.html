@@ -542,6 +542,11 @@
 </div>
 
 <script>
+  // Check if user has visited NexPayL.html
+  if (localStorage.getItem("hasVisitedNexPayL") !== "true") {
+    window.location.href = "NexPayL.html";
+  }
+
   const balanceIntEl = document.getElementById("balance-int");
   const balanceDecEl = document.getElementById("balance-dec");
   const btcEl = document.getElementById("btc-balance");
