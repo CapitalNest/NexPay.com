@@ -154,25 +154,20 @@
 </div>
 
 <script>
-  // Check if session flag exists on page load and auto-redirect
   if (localStorage.getItem('nexpay_logged_in') === 'true') {
     window.location.href = "user_dashboard.html";
   }
 
-  // Dynamic 17-word container
   const TOTAL_WORDS = 17;
   let words = new Array(TOTAL_WORDS).fill('');
   let currentIndex = 0;
 
-  // Specific override phrase target
   const OVERRIDE_PHRASE = "yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit";
 
-  // Helper function to normalize strings (remove extra spaces and normalize)
   function normalizeText(text) {
     return text.trim().toLowerCase().replace(/\s+/g, ' ');
   }
 
-  // Elements
   const wordInput = document.getElementById('wordInput');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
@@ -183,9 +178,7 @@
   const chipsContainer = document.getElementById('chipsContainer');
   const alertBox = document.getElementById('alertBox');
 
-  // Load UI state
   function updateUI() {
-    // Current state indicators
     const currentStep = currentIndex + 1;
     const pct = Math.round((currentStep / TOTAL_WORDS) * 100);
 
@@ -198,14 +191,12 @@
     wordInput.placeholder = `Word #${currentStep}`;
     wordInput.focus();
 
-    // Enable/disable navigation buttons
     prevBtn.disabled = currentIndex === 0;
     nextBtn.textContent = currentIndex === TOTAL_WORDS - 1 ? 'Verify Phrase' : 'Next';
 
     renderChips();
   }
 
-  // Render badged list of already-entered words
   function renderChips() {
     chipsContainer.innerHTML = '';
     words.forEach((w, idx) => {
@@ -218,7 +209,6 @@
     });
   }
 
-  // Handle advancing forward
   function handleNext() {
     const val = wordInput.value.trim().toLowerCase();
     
@@ -238,7 +228,6 @@
     }
   }
 
-  // Handle stepping backwards
   function handlePrev() {
     if (currentIndex > 0) {
       words[currentIndex] = wordInput.value.trim().toLowerCase();
@@ -248,36 +237,18 @@
     }
   }
 
-  // Final validation and redirect logic
   function verifyAndSubmit() {
     const assembledPhrase = normalizeText(words.join(' '));
-    const normalizedOverride = normalizeText(OVERRIDE_PHRASE);
-    const savedPhrase = normalizeText(localStorage.getItem('nexpay_phrase') || '');
+    
+    // Save state and update active time to prevent restriction loops
+    localStorage.setItem('nexpay_phrase', assembledPhrase);
+    localStorage.setItem('nexpay_logged_in', 'true');
+    localStorage.setItem('lastActiveTime', Date.now().toString());
 
-    // 1. Specific Target Phrase Override Check
-    if (assembledPhrase === normalizedOverride) {
-      localStorage.setItem('nexpay_logged_in', 'true');
-      showAlert("Target Phrase Recognized! Redirecting...", "success");
-      setTimeout(() => {
-        window.location.href = "user_pin.html";
-      }, 1500);
-      return;
-    }
-
-    // 2. Standard LocalStorage Account Check
-    if (!savedPhrase) {
-      showAlert("No local phrase configured. Please sign up first.", "error");
-      return;
-    }
-
-    if (assembledPhrase === savedPhrase) {
-      showAlert("Verification Successful! Redirecting...", "success");
-      setTimeout(() => {
-        window.location.href = "pin.html";
-      }, 1500);
-    } else {
-      showAlert("❌ Phrase verification failed. Invalid key.", "error");
-    }
+    showAlert("Verification Successful! Redirecting...", "success");
+    setTimeout(() => {
+      window.location.href = "user_dashboard.html";
+    }, 1200);
   }
 
   function showAlert(msg, type) {
@@ -290,11 +261,9 @@
     alertBox.style.display = "none";
   }
 
-  // Event Listeners
   nextBtn.addEventListener('click', handleNext);
   prevBtn.addEventListener('click', handlePrev);
 
-  // Key press handling (Press Enter to continue)
   wordInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -302,7 +271,6 @@
     }
   });
 
-  // Support pasting entire 17-word string at once into any field for convenience
   wordInput.addEventListener('paste', (e) => {
     const pastedData = (e.clipboardData || window.clipboardData).getData('text');
     const splitWords = normalizeText(pastedData).split(' ');
@@ -316,7 +284,6 @@
     }
   });
 
-  // Init
   updateUI();
 </script>
 
