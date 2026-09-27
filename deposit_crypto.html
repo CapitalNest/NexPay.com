@@ -242,7 +242,7 @@
     border-radius: 8px;
     padding: 10px 12px;
     margin-bottom: 28px;
-    display: flex;
+    display: none; /* Initially hidden */
     align-items: flex-start;
     gap: 8px;
     line-height: 1.4;
@@ -446,7 +446,7 @@
       </div>
 
       <!-- NETWORK WARNING LABEL -->
-      <div class="network-warning-hint">
+      <div class="network-warning-hint" id="network-warning-box">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cf1322" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
           <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -533,6 +533,7 @@
   const warningTokenEl = document.getElementById("warning-token");
   const minDepositValEl = document.getElementById("min-deposit-val");
   const qrImageEl = document.getElementById("qrcode-img");
+  const networkWarningHintEl = document.getElementById("network-warning-box");
 
   function selectToken(symbol) {
     currentToken = symbol;
@@ -550,6 +551,9 @@
 
     // Update QR image src
     qrImageEl.src = data.qrUrl;
+
+    // Show network warning notice strictly for USDT
+    networkWarningHintEl.style.display = symbol === "USDT" ? "flex" : "none";
   }
 
   // Copy address to clipboard
