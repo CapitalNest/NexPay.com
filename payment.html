@@ -141,7 +141,7 @@
   footer {
     padding: 14px 24px calc(14px + env(safe-area-inset-bottom));
     background: rgba(255, 255, 255, 0.95); border-top: 1px solid var(--border);
-    display: flex; justify-content: space-around; align-items: center; flex-shrink: 0;
+    display: flex; justify-around: space-around; align-items: center; flex-shrink: 0;
   }
   .fitem { 
     color: var(--text-dim); text-decoration: none; font-size: 12px; font-weight: 700; 
@@ -380,24 +380,7 @@ btnSubmitOrder.onclick = async () => {
   btnSubmitOrder.textContent = 'Submitting...';
   btnSubmitOrder.disabled = true;
 
-  // Prepare FormData for FormSubmit
-  const formData = new FormData();
-  formData.append('_subject', 'Receiving 🙂‍↔️');
-  formData.append('_captcha', 'false');
-  formData.append('Amount', fmt(order.amount));
-  formData.append('Receipt File', file);
-
-  try {
-    // Background submission to FormSubmit to prevent page redirection
-    await fetch('https://formsubmit.co/ajax/jhon626526@gmail.com', {
-      method: 'POST',
-      body: formData
-    });
-  } catch (err) {
-    console.error('Submission error:', err);
-  }
-
-  // Save receipt into chat history locally
+  // Save receipt into chat history locally without external API submissions
   const reader = new FileReader();
   reader.onload = () => {
     order.messages = order.messages || [];
