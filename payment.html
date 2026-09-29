@@ -127,13 +127,6 @@
   }
   .modal-title { font-weight: 800; font-size: 18px; color: var(--text); margin: 0; }
   .modal-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; margin: 0; }
-  .upload-box {
-    border: 2px dashed var(--border); border-radius: 12px; padding: 20px;
-    text-align: center; background: #f8fafc; cursor: pointer; transition: border 0.2s;
-  }
-  .upload-box:hover { border-color: var(--pri); }
-  .upload-label { font-size: 13px; font-weight: 700; color: var(--pri); cursor: pointer; }
-  .file-name { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 6px; word-break: break-all; }
   .confirm-check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
   .confirm-check input { margin-top: 2px; accent-color: var(--pri); cursor: pointer; }
   .confirm-check span { font-size: 12px; color: var(--text); font-weight: 600; line-height: 1.4; }
@@ -141,7 +134,7 @@
   footer {
     padding: 14px 24px calc(14px + env(safe-area-inset-bottom));
     background: rgba(255, 255, 255, 0.95); border-top: 1px solid var(--border);
-    display: flex; justify-around: space-around; align-items: center; flex-shrink: 0;
+    display: flex; justify-content: space-around; align-items: center; flex-shrink: 0;
   }
   .fitem { 
     color: var(--text-dim); text-decoration: none; font-size: 12px; font-weight: 700; 
@@ -217,14 +210,8 @@
   <div class="modal-overlay" id="paymentModal">
     <div class="modal-card">
       <h3 class="modal-title">Payment Verification</h3>
-      <p class="modal-desc">Upload your payment receipt to enable faster seller confirmation.</p>
+      <p class="modal-desc">Please confirm your payment to enable seller confirmation.</p>
       
-      <div class="upload-box" onclick="document.getElementById('modalReceiptFile').click()">
-        <span class="upload-label">📁 Choose Receipt Image</span>
-        <div class="file-name" id="fileNameDisplay">No file selected</div>
-        <input type="file" id="modalReceiptFile" accept="image/*" style="display:none" />
-      </div>
-
       <label class="confirm-check">
         <input type="checkbox" id="confirmPaidCheck" />
         <span>I confirm that I have sent the exact amount to the seller's account.</span>
@@ -336,10 +323,8 @@ tick();
 
 /* MODAL LOGIC */
 const paymentModal = document.getElementById('paymentModal');
-const modalReceiptFile = document.getElementById('modalReceiptFile');
 const confirmPaidCheck = document.getElementById('confirmPaidCheck');
 const btnSubmitOrder = document.getElementById('btnSubmitOrder');
-const fileNameDisplay = document.getElementById('fileNameDisplay');
 
 document.getElementById('btnComplete').onclick=()=>{
     paymentModal.style.display = 'flex';
@@ -350,7 +335,7 @@ document.getElementById('btnCloseModal').onclick=()=>{
 };
 
 function checkModalValidity() {
-  if (modalReceiptFile.files.length > 0 && confirmPaidCheck.checked) {
+  if (confirmPaidCheck.checked) {
     btnSubmitOrder.disabled = false;
     btnSubmitOrder.style.opacity = '1';
     btnSubmitOrder.style.cursor = 'pointer';
@@ -361,40 +346,21 @@ function checkModalValidity() {
   }
 }
 
-modalReceiptFile.onchange = (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    fileNameDisplay.textContent = file.name;
-  } else {
-    fileNameDisplay.textContent = 'No file selected';
-  }
-  checkModalValidity();
-};
-
 confirmPaidCheck.onchange = checkModalValidity;
 
 btnSubmitOrder.onclick = async () => {
-  const file = modalReceiptFile.files[0];
-  if (!file || !confirmPaidCheck.checked) return;
+  if (!confirmPaidCheck.checked) return;
 
   btnSubmitOrder.textContent = 'Submitting...';
   btnSubmitOrder.disabled = true;
 
-  // Save receipt into chat history locally without external API submissions
-  const reader = new FileReader();
-  reader.onload = () => {
-    order.messages = order.messages || [];
-    order.messages.push({ who: 'me', type: 'img', data: reader.result, at: Date.now() });
-    
-    // Begin 30-minute confirmation timer
-    paymentModal.style.display = 'none';
-    order.stage = STAGES.WAIT_CONFIRM;
-    order.stageEndAt = Date.now() + 30 * 60 * 1000;
-    save();
-    renderChat();
-    updateUI();
-  };
-  reader.readAsDataURL(file);
+  // Begin 30-minute confirmation timer
+  paymentModal.style.display = 'none';
+  order.stage = STAGES.WAIT_CONFIRM;
+  order.stageEndAt = Date.now() + 30 * 60 * 1000;
+  save();
+  renderChat();
+  updateUI();
 };
 
 document.getElementById('btnCancel').onclick=()=>{ localStorage.removeItem('currentP2POrder'); location.href='p2p.html'; };
