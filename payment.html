@@ -115,22 +115,6 @@
   #sendBtn:hover { background: #059669; }
   #sendBtn:active { transform: scale(0.97); }
 
-  /* MODAL STYLES */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
-  }
-  .modal-card {
-    background: #ffffff; border-radius: 20px; width: 100%; max-width: 440px;
-    padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
-    display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--border);
-  }
-  .modal-title { font-weight: 800; font-size: 18px; color: var(--text); margin: 0; }
-  .modal-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; margin: 0; }
-  .confirm-check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
-  .confirm-check input { margin-top: 2px; accent-color: var(--pri); cursor: pointer; }
-  .confirm-check span { font-size: 12px; color: var(--text); font-weight: 600; line-height: 1.4; }
-
   footer {
     padding: 14px 24px calc(14px + env(safe-area-inset-bottom));
     background: rgba(255, 255, 255, 0.95); border-top: 1px solid var(--border);
@@ -205,22 +189,6 @@
       Orders
     </a>
   </footer>
-
-  <!-- PROOF OF PAYMENT MODAL -->
-  <div class="modal-overlay" id="paymentModal">
-    <div class="modal-card">
-      <h3 class="modal-title">Payment Verification</h3>
-      <p class="modal-desc">Please confirm your payment to enable seller confirmation.</p>
-      
-      <label class="confirm-check">
-        <input type="checkbox" id="confirmPaidCheck" />
-        <span>I confirm that I have sent the exact amount to the seller's account.</span>
-      </label>
-
-      <button class="btn" id="btnSubmitOrder" disabled style="opacity: 0.6; cursor: not-allowed;">Submit Order</button>
-      <button class="btn-ghost" id="btnCloseModal">Back</button>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -321,45 +289,10 @@ function tick(){
 }
 tick();
 
-/* MODAL LOGIC */
-const paymentModal = document.getElementById('paymentModal');
-const confirmPaidCheck = document.getElementById('confirmPaidCheck');
-const btnSubmitOrder = document.getElementById('btnSubmitOrder');
-
 document.getElementById('btnComplete').onclick=()=>{
-    paymentModal.style.display = 'flex';
-};
-
-document.getElementById('btnCloseModal').onclick=()=>{
-    paymentModal.style.display = 'none';
-};
-
-function checkModalValidity() {
-  if (confirmPaidCheck.checked) {
-    btnSubmitOrder.disabled = false;
-    btnSubmitOrder.style.opacity = '1';
-    btnSubmitOrder.style.cursor = 'pointer';
-  } else {
-    btnSubmitOrder.disabled = true;
-    btnSubmitOrder.style.opacity = '0.6';
-    btnSubmitOrder.style.cursor = 'not-allowed';
-  }
-}
-
-confirmPaidCheck.onchange = checkModalValidity;
-
-btnSubmitOrder.onclick = async () => {
-  if (!confirmPaidCheck.checked) return;
-
-  btnSubmitOrder.textContent = 'Submitting...';
-  btnSubmitOrder.disabled = true;
-
-  // Begin 30-minute confirmation timer
-  paymentModal.style.display = 'none';
   order.stage = STAGES.WAIT_CONFIRM;
   order.stageEndAt = Date.now() + 30 * 60 * 1000;
   save();
-  renderChat();
   updateUI();
 };
 
