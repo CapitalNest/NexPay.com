@@ -422,7 +422,7 @@
     <div class="form-group">
       <div class="form-label">
         <span>Amount (EUR)</span>
-        <span style="font-weight: 500; text-transform: none;">Available: €506.24</span>
+        <span style="font-weight: 500; text-transform: none;">Available: €326.94</span>
       </div>
       <div class="input-wrapper">
         <input type="number" class="form-input" id="eur-amount" placeholder="0.00" min="0.01" step="0.01" oninput="calculateBtc()" />
@@ -571,7 +571,7 @@
       return;
     }
 
-    if (eurVal > 506.24) {
+    if (eurVal > 326.94) {
       alert('Transfer amount exceeds available portfolio balance (€506.24).');
       return;
     }
