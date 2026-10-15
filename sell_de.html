@@ -178,7 +178,7 @@
   function calculate() {
     const val = parseFloat(amountInput.value);
     if(val >= 0.0054) {
-        nairaValue.value = "Fetching Rate...";
+        nairaValue.value = "Refreshing quote...";
         nairaValue.classList.add('loader-dots');
         setTimeout(() => {
             const calculatedNaira = val * btcRateEur * eurToNgnRate;
