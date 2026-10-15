@@ -182,7 +182,7 @@
   function calculate() {
     const val = parseFloat(amountInput.value);
     if(hasBalance && val >= 0.0056) {
-        nairaValue.value = "Fetching Rate...";
+        nairaValue.value = "Refreshing quote...";
         nairaValue.classList.add('loader-dots');
         setTimeout(() => {
             nairaValue.value = "₦" + rate.toLocaleString();
